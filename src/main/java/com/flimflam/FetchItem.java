@@ -9,7 +9,7 @@ public class FetchItem {
 	public String itemString;
 	
 	FetchItem(String ID) throws IOException{
-		System.out.println(".");
+		System.out.print(".");
 		URL omdbapi = new URL(URLer(ID));
 		BufferedReader in = new BufferedReader(new InputStreamReader(omdbapi.openStream()));
 		itemString = in.readLine();
