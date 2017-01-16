@@ -45,7 +45,10 @@ public class List {
 	
 	public List search(){
 		List tmpList = new List();
+		if((sp.genres.isEmpty()) || (sp.getIMDBRating()==0.0))
+			return tmpList;
 		for(Item item : this.arrList) {
+//			System.out.println(item.json.get("Title"));
 			if(sp.validateItem(item, sp)){
 				System.out.println("item match");
 				tmpList.data.add(t.pair(new Webs(item.json), new Image(item.json.get("Poster").toString())));

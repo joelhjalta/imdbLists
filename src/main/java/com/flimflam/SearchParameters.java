@@ -12,16 +12,16 @@ class SearchParameters {
 	// }
 
 	public boolean validateItem(Item item, SearchParameters sp) {
-		if ((imdbRating != 0.0) && !(validateRating(item, sp))) {
+		if ((sp.imdbRating != 0.0) && !(validateRating(item, sp))) {
 			System.out.println("rating mismatch");
 			return false;
 		}
 
-		else if (!(validateYear(item, sp)))
-			return false;
+//		else if (!(validateYear(item, sp)))
+//			return false;
 
 		else if (!(validateGenre(item, sp))) {
-			System.out.println("genre match");
+			System.out.println("genre mismatch " + sp.genres.toString());
 			return false;
 		}
 
@@ -29,12 +29,13 @@ class SearchParameters {
 	}
 
 	private boolean validateGenre(Item item, SearchParameters sp) {
-		if (!(sp.genres.isEmpty())) {
-			String[] genresArr = item.json.get("Genre").toString().split(",");
-			for (String g : genresArr)
-				if (sp.genres.contains(g.trim()))
-					return true;
-		}
+		if (sp.genres.isEmpty())
+			return true;
+
+		String[] genresArr = item.json.get("Genre").toString().split(",");
+		for (String g : genresArr)
+			if (sp.genres.contains(g.trim()))
+				return true;
 
 		return false;
 	}
