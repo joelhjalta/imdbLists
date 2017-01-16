@@ -47,6 +47,7 @@ public class List {
 		List tmpList = new List();
 		for(Item item : this.arrList) {
 			if(sp.validateItem(item, sp)){
+				System.out.println("item match");
 				tmpList.data.add(t.pair(new Webs(item.json), new Image(item.json.get("Poster").toString())));
 			}
 		}
