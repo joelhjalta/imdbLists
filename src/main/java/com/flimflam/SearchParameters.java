@@ -4,7 +4,6 @@ import java.util.HashSet;
 
 class SearchParameters {
 	private double imdbRating = 0.0;
-	private String ratingEquality = "NA";
 	private int year=0, fromYear=0, toYear=0;
 	public HashSet<String> genres = new HashSet<String>();
 	
@@ -50,24 +49,21 @@ class SearchParameters {
 	
 	private boolean validateRating(Item item, SearchParameters sp){
 		if(sp.imdbRating!=0.0){
-			if(sp.ratingEquality.equals("g")){
-				if(Double.parseDouble(item.json.get("imdbRating").toString()) < sp.imdbRating )
-					return false;
+			if(item.json.get("imdbRating").equals("N/A")){
+				return true;
 			}
-			else if(sp.ratingEquality.equals("l"))
-				if(Double.parseDouble(item.json.get("imdbRating").toString()) >= sp.imdbRating )
-					return false;
-			else if((sp.ratingEquality.equals("NA")) || (sp.ratingEquality.equals("e")))
-				if(Double.parseDouble(item.json.get("imdbRating").toString()) != sp.imdbRating )
-					return false;
+			else if(Double.parseDouble( item.json.get("imdbRating").toString() ) >= sp.imdbRating ){
+				System.out.println(Double.parseDouble( item.json.get("imdbRating").toString()) + " >= " + sp.imdbRating);
+				return true;
+			}
 		}
 		
-		return true;
+		return false;
 	}
 	
-	public void setRating(double rating, String equality){
+	public void setRating(double rating){
+		System.out.println("Setting rating to: " + rating);
 		this.imdbRating = rating;
-		this.ratingEquality = equality;
 	}
 	
 	public void addGenre(String genre){
@@ -82,7 +78,5 @@ class SearchParameters {
 		return imdbRating;
 	}
 	
-	public String getRatingEquality(){
-		return ratingEquality;
-	}
+	
 }
