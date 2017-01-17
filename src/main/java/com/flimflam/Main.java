@@ -56,9 +56,7 @@ public class Main extends Application {
       Button submitBtn = new Button("Submit");
       submitBtn.setOnAction(new EventHandler<ActionEvent>() {
           @Override public void handle(ActionEvent e) {
-        	  List search = masterList.search();
 //	          System.out.println("input: " + input.getText());
-	          Double rating=null;
 	          
 	          if(input.getText().isEmpty())
 	        	  masterList.sp.setRating(0.0);
@@ -67,6 +65,7 @@ public class Main extends Application {
 	        	  masterList.sp.setRating(Double.parseDouble(input.getText()));
 	          }
 	          table.table.getItems().clear();
+	          List search = masterList.search();
 	          table.populateTable(search);
           }
       });

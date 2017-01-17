@@ -13,7 +13,7 @@ class SearchParameters {
 
 	public boolean validateItem(Item item, SearchParameters sp) {
 		if ((sp.imdbRating != 0.0) && !(validateRating(item, sp))) {
-			System.out.println("rating mismatch");
+//			System.out.println("rating mismatch");
 			return false;
 		}
 
@@ -21,7 +21,7 @@ class SearchParameters {
 //			return false;
 
 		else if (!(validateGenre(item, sp))) {
-			System.out.println("genre mismatch " + sp.genres.toString());
+//			System.out.println("genre mismatch " + sp.genres.toString());
 			return false;
 		}
 
@@ -56,7 +56,7 @@ class SearchParameters {
 		if (item.json.get("imdbRating").equals("N/A")) {
 			return true;
 		} else if (Double.parseDouble(item.json.get("imdbRating").toString()) >= sp.imdbRating) {
-			System.out.println(Double.parseDouble(item.json.get("imdbRating").toString()) + " >= " + sp.imdbRating);
+//			System.out.println(Double.parseDouble(item.json.get("imdbRating").toString()) + " >= " + sp.imdbRating);
 			return true;
 		}
 
@@ -64,7 +64,7 @@ class SearchParameters {
 	}
 
 	public void setRating(double rating) {
-		System.out.println("Setting rating to: " + rating);
+//		System.out.println("Setting rating to: " + rating);
 		this.imdbRating = rating;
 	}
 
