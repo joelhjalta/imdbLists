@@ -41,6 +41,7 @@ public class List {
 	public void add(Item item){
         this.data.add( t.pair(new Webs(item.json), new Image(item.json.get("Poster").toString())) );
 		this.arrList.add(item);
+//		System.out.println(item.json.get("Year").toString().length());
 	}
 	
 	public List search(){
