@@ -4,7 +4,9 @@ import java.util.HashSet;
 
 class SearchParameters {
 	private double imdbRating = 0.0;
-	private int year = 0, fromYear = 0, toYear = 0;
+	private int year = 0;
+	private boolean g;
+	private boolean l;
 	public HashSet<String> genres = new HashSet<String>();
 
 	// SearchParameters(){
@@ -20,7 +22,7 @@ class SearchParameters {
 //		else if (!(validateYear(item, sp)))
 //			return false;
 
-		else if (!(validateGenre(item, sp))) {
+		else if (!(sp.genres.isEmpty())&& !(validateGenre(item, sp))) {
 //			System.out.println("genre mismatch " + sp.genres.toString());
 			return false;
 		}
@@ -41,15 +43,20 @@ class SearchParameters {
 	}
 
 	private boolean validateYear(Item item, SearchParameters sp) {
-		if ((sp.year != 0) && (Integer.parseInt(item.json.get("Year").toString()) != sp.year))
-			return false;
-
-		else if (sp.fromYear != 0)
-			if (Integer.parseInt(item.json.get("Year").toString()) < sp.fromYear)
-				return false;
-			else if (Integer.parseInt(item.json.get("Year").toString()) > sp.toYear)
-				return false;
-		return true;
+		if (sp.year == 0)
+			return true;
+		
+		else if(Integer.parseInt(item.json.get("Year").toString()) == sp.year)
+			return true;
+		
+		else if(sp.g && Integer.parseInt(item.json.get("Year").toString()) >= sp.year)
+			return true;
+			
+		else if(sp.l && Integer.parseInt(item.json.get("Year").toString()) <= sp.year)
+			return true;
+		
+		
+		return false;
 	}
 
 	private boolean validateRating(Item item, SearchParameters sp) {
@@ -61,6 +68,12 @@ class SearchParameters {
 		}
 
 		return false;
+	}
+	
+	public void setYear(String year, boolean g, boolean l){
+		this.year = Integer.parseInt(year);
+		this.g = g;
+		this.l = l;
 	}
 
 	public void setRating(double rating) {

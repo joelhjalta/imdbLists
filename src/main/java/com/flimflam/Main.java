@@ -1,37 +1,14 @@
 package com.flimflam;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.swing.GroupLayout.Alignment;
-
-import org.junit.Test;
-
 import javafx.application.*;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.TableView.ResizeFeatures;
-import javafx.scene.image.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javafx.util.Pair;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 public class Main extends Application {
 
@@ -43,23 +20,30 @@ public class Main extends Application {
 	// private CSVReader cr = new CSVReader("WATCHLIST2.csv");
 	public List masterList = new List(true);
 	public Table table = new Table(masterList);
-	private TextField input = new TextField();
+	private TextField ratingInput = new TextField();
+	private TextField yearInput = new TextField();
 	private CheckBox g = null;
 	private CheckBox l = null;
 	private EventHandler<ActionEvent> eh = new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
-        	if (input.getText().isEmpty())
+        	if (ratingInput.getText().isEmpty())
 				masterList.sp.setRating(0.0);
 			else {
 				// System.out.println(input.getText());
-				masterList.sp.setRating(Double.parseDouble(input.getText()));
+				masterList.sp.setRating(Double.parseDouble(ratingInput.getText()));
 			}
+        	
+        	System.out.println(yearInput.getText() + " selected ");
+        	if(!(yearInput.getText().isEmpty())){
+        		System.out.println("year chosen");
+        		masterList.sp.setYear(yearInput.getText(), g.isSelected(), l.isSelected());
+        	}
+        	
 			table.table.getItems().clear();
 			List search = masterList.search();
 			table.populateTable(search);
 			
-			System.out.println(g.getText() + ": " + g.isSelected());
         }
     };
 
@@ -72,29 +56,13 @@ public class Main extends Application {
 		table.populateTable(masterList);
 
 		Button submitBtn = new Button("Submit");
-		/*submitBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				// System.out.println("input: " + input.getText());
-
-				if (input.getText().isEmpty())
-					masterList.sp.setRating(0.0);
-				else {
-					// System.out.println(input.getText());
-					masterList.sp.setRating(Double.parseDouble(input.getText()));
-				}
-				table.table.getItems().clear();
-				List search = masterList.search();
-				table.populateTable(search);
-			}
-
-			
-		});*/
 		submitBtn.setOnAction(eh);
 		submitBtn.setStyle("-fx-Alignment: center;");
 		
-		TextField input = new TextField();
-		input.setPromptText("Year");
+		TextField yearInput = new TextField();
+		yearInput.setPromptText("Year");
+		yearInput.setMinWidth(50);
+		yearInput.setMaxWidth(50);
 		final Tooltip gTip = new Tooltip("Greater than or equal to. (checking both means =)");
 		final Tooltip lTip = new Tooltip("Less than or equal to. (checking both means =)");
 
@@ -103,14 +71,16 @@ public class Main extends Application {
 		l = new CheckBox(">=");
 		l.setTooltip(lTip);
 
-		HBox yearBox = new HBox(input, g, l);
+		HBox yearBox = new HBox(yearInput, g, l);
 		yearBox.setSpacing(10);
 		
-		input.setPromptText("Rating");
+		ratingInput.setPromptText("Rating");
+		ratingInput.setMinWidth(50);
+		ratingInput.setMaxWidth(50);
 
 		MenuBtn mb = new MenuBtn(masterList);
 
-		VBox vb = new VBox(mb.menubutton, input, yearBox, submitBtn);
+		VBox vb = new VBox(mb.menubutton, ratingInput, yearBox, submitBtn);
 		vb.setSpacing(10);
 		vb.setPadding(new Insets(10, 50, 50, 10));
 		HBox hb = new HBox(table.table, vb);

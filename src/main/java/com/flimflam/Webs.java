@@ -17,8 +17,16 @@ public class Webs  {
 	
     Webs(JSONObject json){
 //    	System.out.println(json.get("Webs" + "Title"));
+    	String year = "";
+    	if(json.get("Year").toString().length()==4)
+    		year = json.get("Year").toString();
+    	else if(json.get("Year").toString().length()==7)
+    		year = json.get("Year").toString().substring(0, 4) + "-present";
+    	else if(json.get("Year").toString().length()==11)
+    		year = json.get("Year").toString().substring(0, 3) + "-" + json.get("Year").toString().substring(7, 10);
+    		
     	this.webEngine.loadContent("<h1>"+ json.get("Title").toString() +"</h1><br>"
-    			+ "<h3>" + json.get("Year").toString() + "</h3><br>"
+    			+ "<h3>" + year + "</h3><br>"
     			+ "<h3>" + json.get("imdbRating").toString() + "</h3><br>"
     			+ json.get("Plot").toString() + "<br>");
         this.webEngine.setUserStyleSheetLocation(getClass().getResource("application.css").toString());
