@@ -15,7 +15,7 @@ public class Table {
 	public static final String INFO_COLUMN_NAME  = "Info";
     public static final String POSTER_COLUMN_NAME = "Poster";
     public final TableView<Pair<WebView, Object>> table = new TableView<>();
-    private ObservableList<Pair<WebView, Object>> data = FXCollections.observableArrayList();
+//    private ObservableList<Pair<WebView, Object>> data = FXCollections.observableArrayList();
     private List master;
 	
 	Table(List list){
@@ -52,10 +52,12 @@ public class Table {
 //		String poster;
 //	    Webs wv;
 	    
-	    if(list.data.isEmpty())
+	    if(list.data.isEmpty()){
+	    	System.out.println("List was empty, loading master list.");
 	    	list = master;
+	    }
 	    
-//	    System.out.println("Populating table with " + list.data.size() + " elements.");
+	    System.out.println("Populating table with " + list.data.size() + " elements.");
 //		for(Item item : list.arrList){
 //    		
 //    		poster = item.json.get("Poster").toString();
@@ -76,7 +78,7 @@ public class Table {
     	
     }
 	
-	public Pair<WebView, Object> pair(WebView wv, Object value) {
-        return new Pair<>(wv, value);
+	public Pair<WebView, Object> pair(Webs web, Object value) {
+        return new Pair<>(web.browser, value);
     }
 }

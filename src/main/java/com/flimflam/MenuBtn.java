@@ -9,7 +9,7 @@ import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.MenuButton;
 
 public class MenuBtn {
-	public MenuButton menubutton = new MenuButton ( ) ;
+	public MenuButton menubutton = new MenuButton ("Genre") ;
 	private List master;
 	private EventHandler<ActionEvent> eh = new EventHandler<ActionEvent>() {
         @Override

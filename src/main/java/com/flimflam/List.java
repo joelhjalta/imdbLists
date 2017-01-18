@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +26,7 @@ public class List {
 	final String file = "WATCHLIST2.csv";
 	private Table t = new Table(this);
 	
-	public HashMap<String, List> allLists = new HashMap<String, List>();
+	public HashMap<String, ObservableList<Pair<WebView, Object>>> searchLists = new HashMap<String, ObservableList<Pair<WebView, Object>>>();
 	
 	
 	List(){
@@ -38,26 +39,24 @@ public class List {
 	}
 	
 	public void add(Item item){
-		Webs wv = new Webs(item.json);
-        this.data.add( t.pair(wv.browser, new Image(item.json.get("Poster").toString())) );
+        this.data.add( t.pair(new Webs(item.json), new Image(item.json.get("Poster").toString())) );
 		this.arrList.add(item);
+//		System.out.println(item.json.get("Year").toString().length());
 	}
 	
 	public List search(){
-//		String poster;
 		List tmpList = new List();
+		if((sp.genres.isEmpty()) && (sp.getIMDBRating()==0.0) && (sp.getYear() == 0)){
+			System.out.println("sp empty");
+			return tmpList;
+		}
 		for(Item item : this.arrList) {
 //			System.out.println(item.json.get("Title"));
 			if(sp.validateItem(item, sp)){
-//				poster = item.json.get("Poster").toString();
-//				if(poster.equals("N/A")) 
-//        			poster = "http://www.kalahandi.info/wp-content/uploads/2016/05/sorry-image-not-available.png";
-				Webs wv = new Webs(item.json);
-				tmpList.data.add(t.pair(wv.browser, new Image(item.json.get("Poster").toString())));
+				System.out.println("item match");
+				tmpList.data.add(t.pair(new Webs(item.json), new Image(item.json.get("Poster").toString())));
 			}
 		}
-		
-//		System.out.println("Sending " + tmpList.data.size() + " items.");
 		return tmpList;
 	}
 	
@@ -67,39 +66,24 @@ public class List {
 	        String genresStr = "";
 	        String[] genresArr;
 	        
-//	        File dir = new File(".");
-//	    	for(String fileNames : dir.list()) System.out.println(fileNames);
-
-	        //To show what files are in the directory
-	        //File file = new File(".");
-	        //for(String fileNames : file.list()) System.out.println(fileNames);
-	        
 	        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
 	            while ((line = br.readLine()) != null) {
-
-	                // use comma as separator
 	                String[] values = line.split(",");
 	                FetchItem fi = new FetchItem(values[1].substring(2, values[1].length()-2));
-	                Item it = new Item(fi.itemString);
-	                genresStr = it.json.get("Genre").toString();
+	                Item item = new Item(fi.itemString);
+	                genresStr = item.json.get("Genre").toString();
 	                genresArr = genresStr.split(", ");
-//	                System.out.println(it.json.get("Genre"));
-	                checkPoster(it);
-	                for(String s : genresArr) genres.add(s);
+	                checkPoster(item);
+	                for(String s : genresArr) this.genres.add(s);
 
-	                add(it);
+	                add(item);
 	            }
 
 	        } catch (IOException e) {
 	            e.printStackTrace();
-	        /*} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();*/
-			}
+	        }
 	        
-//	        System.out.println(genres.size()+"\n"+genres);
-
 	}
 	
 	public void checkPoster(Item it){

@@ -1,137 +1,97 @@
 package com.flimflam;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.swing.GroupLayout.Alignment;
-
-import org.junit.Test;
-
 import javafx.application.*;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.TableView.ResizeFeatures;
-import javafx.scene.image.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javafx.util.Pair;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 public class Main extends Application {
 
 	// private static final Callback<ResizeFeatures, Boolean>
 	// CONSTRAINED_RESIZE_POLICY = null;
 	// private CSVReader cr = new CSVReader("WATCHLIST2.csv");
-//	private static final Callback<ResizeFeatures, Boolean> CONSTRAINED_RESIZE_POLICY = null;
-//  private CSVReader cr = new CSVReader("WATCHLIST2.csv");
-	public  List masterList = new List(true);
-	public  Table table = new Table(masterList);
+	// private static final Callback<ResizeFeatures, Boolean>
+	// CONSTRAINED_RESIZE_POLICY = null;
+	// private CSVReader cr = new CSVReader("WATCHLIST2.csv");
+	public List masterList = new List(true);
+	public Table table = new Table(masterList);
+	private TextField ratingInput = new TextField();
+	private TextField yearInput = new TextField();
+	private CheckBox g = null;
+	private CheckBox l = null;
+	private EventHandler<ActionEvent> eh = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+        	if (ratingInput.getText().isEmpty())
+				masterList.sp.setRating(0.0);
+			else 
+				masterList.sp.setRating(Double.parseDouble(ratingInput.getText()));
+        	
+        	if(!(yearInput.getText().isEmpty()))
+        		masterList.sp.setYear(yearInput.getText(), g.isSelected(), l.isSelected());
+        	
+        	else{
+        		masterList.sp.setYear("0", false, false);
+        		g.setSelected(false);
+        		l.setSelected(false);
+        	}
+        	
+        	List search = masterList.search();
+			table.table.getItems().clear();
+			table.populateTable(search);
+			
+        }
+    };
 
-  public static void main(String[] args) throws Exception {
-      launch(args);
-  }
-
-  public void start(final Stage stage) throws Exception {
-      
-      table.populateTable(masterList);
-      
-      Button submitBtn = new Button("Submit");
-      submitBtn.setOnAction(new EventHandler<ActionEvent>() {
-          @Override public void handle(ActionEvent e) {
-          	List search = masterList.search();
-              table.table.getItems().clear();
-              table.populateTable(search);
-          	
-//              table.table.getItems().clear();
-//              masterList.sp.addGenre("Adventure");
-//              List search = masterList.search();
-//              table.populateTable(search);
-          }
-      });
-      submitBtn.setStyle("-fx-Alignment: center;");
-      
-      MenuBtn mb = new MenuBtn(masterList);
-      
-      VBox vb = new VBox(mb.menubutton, submitBtn);
-//      Webs web = new Webs("http://www.kalahandi.info/wp-content/uploads/2016/05/sorry-image-not-available.png");
-      HBox hb = new HBox(table.table, vb);
-//      hb.setHgrow(table, Priority.ALWAYS);
-      
-      // layout the scene.
-  	final StackPane layout = new StackPane();
-      layout.getChildren().setAll(hb);
-      
-      Scene scene = new Scene(layout, 1200, 900);
-      stage.setScene(scene);
-      stage.setMaximized(true);
-      stage.show();
-		 
-
-//		powerSet();
+	public static void main(String[] args) throws Exception {
+		launch(args);
 	}
 
-	@Test
-	public void powerSet() {
-		HashSet<String> strs = new HashSet<String>();
-		strs.add("beta");
-		strs.add("alpha");
-		strs.add("delta");
-		strs.add("niner");
-		Set<Set<String>> result = Sets.powerSet(strs);
-		String tmpstr;
-		String[] tmparr;
-		Iterator iter = result.iterator();
+	public void start(final Stage stage) throws Exception {
 
-		while (iter.hasNext()) {
-			tmpstr = iter.next().toString();
-			// System.out.println(tmpstr);
-			tmparr = tmpstr.substring(1, tmpstr.length() - 1).split(",");
+		table.populateTable(masterList);
 
-			// printArray(tmparr);
-			for (int i = 0; i < tmparr.length; i++) {
-				// System.out.print("before: -"+s+"-");
-				tmparr[i] = tmparr[i].trim();
-				// System.out.print("after: -"+s+"-\n");
-			}
+		Button submitBtn = new Button("Submit");
+		submitBtn.setOnAction(eh);
+		submitBtn.setStyle("-fx-Alignment: center;");
+		
+		yearInput.setPromptText("Year");
+		yearInput.setMinWidth(50);
+		yearInput.setMaxWidth(50);
+		final Tooltip gTip = new Tooltip("Greater than or equal to.");
+		final Tooltip lTip = new Tooltip("Less than or equal to.");
 
-			System.out.println("before:");
-			printArray(tmparr);
-			Arrays.sort(tmparr);
-			System.out.println("after:");
-			printArray(tmparr);
-			System.out.println();
+		g = new CheckBox("<=");
+		g.setTooltip(gTip);
+		l = new CheckBox(">=");
+		l.setTooltip(lTip);
 
-			// if (tmparr.length > 1) {
-			//// printArray(tmparr);
-			// System.out.println(tmparr.hashCode());
-			// List<String> list = Arrays.asList(tmparr);
-			//
-			// //next, reverse the list using Collections.reverse method
-			// Collections.reverse(list);
-			//
-			// //next, convert the list back to String array
-			// tmparr = (String[]) list.toArray();
-			// printArray(tmparr);
-			// System.out.println(tmparr.hashCode() + "\n");
-			// }
+		HBox yearBox = new HBox(yearInput, g, l);
+		yearBox.setSpacing(10);
+		
+		ratingInput.setPromptText("Rating");
+		ratingInput.setMinWidth(50);
+		ratingInput.setMaxWidth(50);
 
-		}
+		MenuBtn mb = new MenuBtn(masterList);
+
+		VBox vb = new VBox(mb.menubutton, ratingInput, yearBox, submitBtn);
+		vb.setSpacing(10);
+		vb.setPadding(new Insets(10, 50, 50, 10));
+		HBox hb = new HBox(table.table, vb);
+
+		final StackPane layout = new StackPane();
+		layout.getChildren().setAll(hb);
+
+		Scene scene = new Scene(layout, 1200, 900);
+		stage.setScene(scene);
+		stage.setMaximized(true);
+		stage.show();
 
 	}
 
