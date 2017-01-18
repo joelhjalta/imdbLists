@@ -29,19 +29,20 @@ public class Main extends Application {
         public void handle(ActionEvent event) {
         	if (ratingInput.getText().isEmpty())
 				masterList.sp.setRating(0.0);
-			else {
-				// System.out.println(input.getText());
+			else 
 				masterList.sp.setRating(Double.parseDouble(ratingInput.getText()));
-			}
         	
-        	System.out.println(yearInput.getText() + " selected ");
-        	if(!(yearInput.getText().isEmpty())){
-        		System.out.println("year chosen");
+        	if(!(yearInput.getText().isEmpty()))
         		masterList.sp.setYear(yearInput.getText(), g.isSelected(), l.isSelected());
+        	
+        	else{
+        		masterList.sp.setYear("0", false, false);
+        		g.setSelected(false);
+        		l.setSelected(false);
         	}
         	
+        	List search = masterList.search();
 			table.table.getItems().clear();
-			List search = masterList.search();
 			table.populateTable(search);
 			
         }
@@ -59,12 +60,11 @@ public class Main extends Application {
 		submitBtn.setOnAction(eh);
 		submitBtn.setStyle("-fx-Alignment: center;");
 		
-		TextField yearInput = new TextField();
 		yearInput.setPromptText("Year");
 		yearInput.setMinWidth(50);
 		yearInput.setMaxWidth(50);
-		final Tooltip gTip = new Tooltip("Greater than or equal to. (checking both means =)");
-		final Tooltip lTip = new Tooltip("Less than or equal to. (checking both means =)");
+		final Tooltip gTip = new Tooltip("Greater than or equal to.");
+		final Tooltip lTip = new Tooltip("Less than or equal to.");
 
 		g = new CheckBox("<=");
 		g.setTooltip(gTip);

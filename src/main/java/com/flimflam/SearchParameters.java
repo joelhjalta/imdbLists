@@ -14,18 +14,16 @@ class SearchParameters {
 	// }
 
 	public boolean validateItem(Item item, SearchParameters sp) {
-		if ((sp.imdbRating != 0.0) && !(validateRating(item, sp))) {
-//			System.out.println("rating mismatch");
+		if ((sp.imdbRating != 0.0) && !(validateRating(item, sp)))
+			return false;
+
+		else if ((sp.year != 0) && !(validateYear(item, sp))){
+//			System.out.println("Year mismatch");
 			return false;
 		}
 
-//		else if (!(validateYear(item, sp)))
-//			return false;
-
-		else if (!(sp.genres.isEmpty())&& !(validateGenre(item, sp))) {
-//			System.out.println("genre mismatch " + sp.genres.toString());
+		else if (!(sp.genres.isEmpty())&& !(validateGenre(item, sp))) 
 			return false;
-		}
 
 		return true;
 	}
@@ -46,15 +44,37 @@ class SearchParameters {
 		if (sp.year == 0)
 			return true;
 		
-		else if(Integer.parseInt(item.json.get("Year").toString()) == sp.year)
+		int y = 0;
+		int varLength = item.json.get("Year").toString().length();
+		if(varLength == 4 )
+			y = Integer.parseInt(item.json.get("Year").toString());
+		
+		else if(varLength == 7)
+			y = Integer.parseInt(item.json.get("Year").toString().substring(0, 4));
+		
+		else if(varLength == 11)
+			return validatePeriod(item, sp);
+			
+		if(y == sp.year)
 			return true;
 		
-		else if(sp.g && Integer.parseInt(item.json.get("Year").toString()) >= sp.year)
+		else if(sp.g && y >= sp.year)
 			return true;
 			
-		else if(sp.l && Integer.parseInt(item.json.get("Year").toString()) <= sp.year)
+		else if(sp.l && y <= sp.year)
 			return true;
 		
+		
+		return false;
+	}
+	
+	private boolean validatePeriod(Item item, SearchParameters sp){
+		System.out.println("period");
+		int from = Integer.parseInt(item.json.get("Year").toString().substring(0, 4));
+		int to = Integer.parseInt(item.json.get("Year").toString().substring(7, 11));
+		
+		if((sp.year >= from) && (sp.year <= to))
+			return true;
 		
 		return false;
 	}
@@ -63,21 +83,19 @@ class SearchParameters {
 		if (item.json.get("imdbRating").equals("N/A")) {
 			return true;
 		} else if (Double.parseDouble(item.json.get("imdbRating").toString()) >= sp.imdbRating) {
-//			System.out.println(Double.parseDouble(item.json.get("imdbRating").toString()) + " >= " + sp.imdbRating);
 			return true;
 		}
 
 		return false;
 	}
 	
-	public void setYear(String year, boolean g, boolean l){
-		this.year = Integer.parseInt(year);
-		this.g = g;
-		this.l = l;
+	public void setYear(String yearInput, boolean gInput, boolean lInput){
+		this.year = Integer.parseInt(yearInput);
+		this.g = gInput;
+		this.l = lInput;
 	}
 
 	public void setRating(double rating) {
-//		System.out.println("Setting rating to: " + rating);
 		this.imdbRating = rating;
 	}
 
@@ -90,7 +108,11 @@ class SearchParameters {
 	}
 
 	public double getIMDBRating() {
-		return imdbRating;
+		return this.imdbRating;
+	}
+	
+	public int getYear(){
+		return this.year;
 	}
 
 }

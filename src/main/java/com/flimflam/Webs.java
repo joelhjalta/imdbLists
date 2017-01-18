@@ -23,7 +23,7 @@ public class Webs  {
     	else if(json.get("Year").toString().length()==7)
     		year = json.get("Year").toString().substring(0, 4) + "-present";
     	else if(json.get("Year").toString().length()==11)
-    		year = json.get("Year").toString().substring(0, 3) + "-" + json.get("Year").toString().substring(7, 10);
+    		year = json.get("Year").toString().substring(0, 4) + "-" + json.get("Year").toString().substring(7, 11);
     		
     	this.webEngine.loadContent("<h1>"+ json.get("Title").toString() +"</h1><br>"
     			+ "<h3>" + year + "</h3><br>"
