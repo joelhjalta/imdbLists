@@ -17,7 +17,7 @@ public class List {
 	public ArrayList<Item> arrList = new ArrayList<>();
 	public HashSet<String> genres = new HashSet<String>();
 	public SearchParameters sp;
-	final String file = "WATCHLIST2.csv";
+	final String file = "WATCHLIST.csv";
 	private Table t = new Table(this);
 	
 	public HashMap<String, ObservableList<Pair<WebView, Object>>> searchLists = new HashMap<String, ObservableList<Pair<WebView, Object>>>();
@@ -64,8 +64,13 @@ public class List {
 
 	            while ((line = br.readLine()) != null) {
 	                String[] values = line.split(",");
+	                if(values[0].toLowerCase().trim().equals("\"position\""))
+	                	continue;
+//	                for(String s : values)
+//	                	System.out.println(s);
 	                FetchItem fi = new FetchItem(values[1].substring(2, values[1].length()-2));
 	                Item item = new Item(fi.itemString);
+	                System.out.println(values[0]);
 	                genresStr = item.json.get("Genre").toString();
 	                genresArr = genresStr.split(", ");
 	                checkPoster(item);
