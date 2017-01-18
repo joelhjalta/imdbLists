@@ -1,11 +1,8 @@
 package com.flimflam;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.image.Image;
 import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import javafx.util.Pair;

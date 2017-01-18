@@ -77,12 +77,14 @@ public class Main extends Application {
 		VBox vb = new VBox(mb.menubutton, ratingInput, yearBox, submitBtn);
 		vb.setSpacing(10);
 		vb.setPadding(new Insets(10, 50, 50, 10));
+		vb.getStyleClass().add("vbox");
 		HBox hb = new HBox(table.table, vb);
 
 		final StackPane layout = new StackPane();
 		layout.getChildren().setAll(hb);
 
 		Scene scene = new Scene(layout, 1200, 900);
+		scene.getStylesheets().add("com/flimflam/application.css");
 		stage.setScene(scene);
 		stage.setMaximized(true);
 		stage.show();

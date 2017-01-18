@@ -1,14 +1,8 @@
 package com.flimflam;
 
 import org.json.simple.JSONObject;
-import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
-import javafx.stage.Stage;
 
 public class Webs  {
 	
