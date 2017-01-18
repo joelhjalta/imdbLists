@@ -12,12 +12,6 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	// private static final Callback<ResizeFeatures, Boolean>
-	// CONSTRAINED_RESIZE_POLICY = null;
-	// private CSVReader cr = new CSVReader("WATCHLIST2.csv");
-	// private static final Callback<ResizeFeatures, Boolean>
-	// CONSTRAINED_RESIZE_POLICY = null;
-	// private CSVReader cr = new CSVReader("WATCHLIST2.csv");
 	public List masterList = new List(true);
 	public Table table = new Table(masterList);
 	private TextField ratingInput = new TextField();
