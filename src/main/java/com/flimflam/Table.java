@@ -15,10 +15,7 @@ public class Table {
 //    private ObservableList<Pair<WebView, Object>> data = FXCollections.observableArrayList();
     private List master;
 	
-	Table(List list){
-//      table.setId("listTable");
-
-		this.master = list;
+	Table(){
 		TableColumn<Pair<WebView, Object>, WebView> infoColumn = new TableColumn<>(INFO_COLUMN_NAME);
 		infoColumn.setPrefWidth(600);
 		infoColumn.setEditable(false);
@@ -72,10 +69,9 @@ public class Table {
 		
     	table.getItems().setAll(list.data);
     	table.setPrefHeight(275);
-    	
     }
 	
-	public Pair<WebView, Object> pair(Webs web, Object value) {
-        return new Pair<>(web.browser, value);
-    }
+	public void setMasterList(List list){
+		this.master = list;
+	}
 }

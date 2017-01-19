@@ -31,7 +31,11 @@ public class MenuBtn {
         }
     };
 	
-	MenuBtn(List list){
+	MenuBtn(){
+		
+	}
+	
+	public void populateGenresList(List list){
 		master = list;
 		ArrayList<CustomMenuItem> menuItems = new ArrayList<CustomMenuItem>();
 		for(String s: list.genres){

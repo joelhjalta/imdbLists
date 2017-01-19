@@ -1,6 +1,7 @@
 package com.flimflam;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,8 +18,8 @@ public class List {
 	public ArrayList<Item> arrList = new ArrayList<>();
 	public HashSet<String> genres = new HashSet<String>();
 	public SearchParameters sp;
-	final String file = "WATCHLIST.csv";
-	private Table t = new Table(this);
+//	final String file = "WATCHLIST.csv";
+//	private Table t = new Table();
 	
 	public HashMap<String, ObservableList<Pair<WebView, Object>>> searchLists = new HashMap<String, ObservableList<Pair<WebView, Object>>>();
 	
@@ -27,13 +28,13 @@ public class List {
 		
 	}
 	
-	List(boolean fullList){
+	List(File file){
 		readCSV(file);
 		sp = new SearchParameters();
 	}
 	
 	public void add(Item item){
-        this.data.add( t.pair(new Webs(item.json), new Image(item.json.get("Poster").toString())) );
+        this.data.add(item.pair);
 		this.arrList.add(item);
 //		System.out.println(item.json.get("Year").toString().length());
 	}
@@ -48,32 +49,32 @@ public class List {
 //			System.out.println(item.json.get("Title"));
 			if(sp.validateItem(item, sp)){
 				System.out.println("item match");
-				tmpList.data.add(t.pair(new Webs(item.json), new Image(item.json.get("Poster").toString())));
+				tmpList.data.add(item.pair);
 			}
 		}
 		return tmpList;
 	}
 	
-	public void readCSV(String file){
+	public void readCSV(File file){
 	        String csvFile = "src/main/resources/com/flimflam/" + file;
 	        String line = "";
 	        String genresStr = "";
 	        String[] genresArr;
 	        
-	        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+	        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
 	            while ((line = br.readLine()) != null) {
 	                String[] values = line.split(",");
 	                if(values[0].toLowerCase().trim().equals("\"position\""))
 	                	continue;
 //	                for(String s : values)
-//	                	System.out.println(s);
-	                FetchItem fi = new FetchItem(values[1].substring(2, values[1].length()-2));
+//	                	System.out.print(s);
+//	                System.out.println("\n" + values[1].substring(1, values[1].length()-1));
+	                FetchItem fi = new FetchItem(values[1].substring(1, values[1].length()-1));
 	                Item item = new Item(fi.itemString);
-	                System.out.println(values[0]);
+//	                System.out.println("\nfi.itemString: " + fi.itemString);
 	                genresStr = item.json.get("Genre").toString();
 	                genresArr = genresStr.split(", ");
-	                checkPoster(item);
 	                for(String s : genresArr) this.genres.add(s);
 
 	                add(item);
@@ -83,11 +84,6 @@ public class List {
 	            e.printStackTrace();
 	        }
 	        
-	}
-	
-	public void checkPoster(Item it){
-		if(it.json.get("Poster").toString().equals("N/A")) 
-        	it.json.put("Poster", "http://www.kalahandi.info/wp-content/uploads/2016/05/sorry-image-not-available.png");
 	}
 	
 	public void printList(){

@@ -8,12 +8,14 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	public List masterList = new List(true);
-	public Table table = new Table(masterList);
+	public List masterList;
+	public Table table = new Table();
+	private MenuBtn mb = new MenuBtn();
 	private TextField ratingInput = new TextField();
 	private TextField yearInput = new TextField();
 	private CheckBox g = null;
@@ -48,8 +50,24 @@ public class Main extends Application {
 
 	public void start(final Stage stage) throws Exception {
 
-		table.populateTable(masterList);
-
+		
+		final FileChooser fileChooser = new FileChooser();
+        final Button fileBtn = new Button("Select file");
+        fileBtn.setOnAction(
+            new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(final ActionEvent e) {
+                    File file = fileChooser.showOpenDialog(stage);
+                    if (file != null) {
+//                        System.out.println("absolute file path: " + file.getAbsolutePath());
+                    	masterList = new List(file);
+                    	mb.populateGenresList(masterList);
+                    	table.setMasterList(masterList);
+                    	table.populateTable(masterList);
+                    }
+                }
+            });
+		
 		Button submitBtn = new Button("Submit");
 		submitBtn.setOnAction(eh);
 		submitBtn.setStyle("-fx-Alignment: center;");
@@ -72,12 +90,12 @@ public class Main extends Application {
 		ratingInput.setMinWidth(50);
 		ratingInput.setMaxWidth(50);
 
-		MenuBtn mb = new MenuBtn(masterList);
+//		MenuBtn mb = new MenuBtn();
 
-		VBox vb = new VBox(mb.menubutton, ratingInput, yearBox, submitBtn);
+		VBox vb = new VBox(fileBtn, mb.menubutton, ratingInput, yearBox, submitBtn);
 		vb.setSpacing(10);
 		vb.setPadding(new Insets(10, 50, 50, 10));
-		vb.getStyleClass().add("vbox");
+//		vb.getStyleClass().add("vbox");
 		HBox hb = new HBox(table.table, vb);
 
 		final StackPane layout = new StackPane();

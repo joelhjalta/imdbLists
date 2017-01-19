@@ -11,8 +11,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javafx.scene.image.Image;
+import javafx.scene.web.WebView;
+import javafx.util.Pair;
+
 class Item {
 	public JSONObject json;
+	public Pair pair;
 		Item(String itemStr){
 		
 			try {
@@ -22,6 +27,9 @@ class Item {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+//			System.out.println("Title: " + this.json.get("Title"));
+			checkPoster();
+			this.pair = pair(new Webs(this.json), new Image(this.json.get("Poster").toString()));
 	}
 		
 	public void printItem(){
@@ -32,4 +40,13 @@ class Item {
 	        it.remove(); // avoids a ConcurrentModificationException
 	    }
 	}
+	
+	private void checkPoster(){
+		if(this.json.get("Poster").toString().equals("N/A")) 
+        	this.json.put("Poster", "http://www.kalahandi.info/wp-content/uploads/2016/05/sorry-image-not-available.png");
+	}
+	
+	public Pair<WebView, Object> pair(Webs web, Object value) {
+        return new Pair<>(web.browser, value);
+    }
 }
