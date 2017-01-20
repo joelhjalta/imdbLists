@@ -15,7 +15,8 @@ public class Main extends Application {
 
 	public List masterList;
 	public Table table = new Table();
-	private MenuBtn mb = new MenuBtn();
+	private MenuBtn menuBtn = new MenuBtn();
+	private Button submitBtn = new Button("Submit");
 	private TextField ratingInput = new TextField();
 	private TextField yearInput = new TextField();
 	private CheckBox g = null;
@@ -50,7 +51,7 @@ public class Main extends Application {
 
 	public void start(final Stage stage) throws Exception {
 
-		
+//		getHostServices().showDocument("http://www.google.com");
 		final FileChooser fileChooser = new FileChooser();
         final Button fileBtn = new Button("Select file");
         fileBtn.setOnAction(
@@ -61,27 +62,38 @@ public class Main extends Application {
                     if (file != null) {
 //                        System.out.println("absolute file path: " + file.getAbsolutePath());
                     	masterList = new List(file);
-                    	mb.populateGenresList(masterList);
+                    	menuBtn.populateGenresList(masterList);
                     	table.setMasterList(masterList);
                     	table.populateTable(masterList);
+                    	
+                    	menuBtn.menubutton.setDisable(false);
+                    	submitBtn.setDisable(false);
+                    	ratingInput.setDisable(false);
+                    	yearInput.setDisable(false);
+                    	g.setDisable(false);
+                    	l.setDisable(false);
                     }
                 }
             });
 		
-		Button submitBtn = new Button("Submit");
 		submitBtn.setOnAction(eh);
 		submitBtn.setStyle("-fx-Alignment: center;");
+		submitBtn.setDisable(true);
+		menuBtn.menubutton.setDisable(true);
 		
 		yearInput.setPromptText("Year");
 		yearInput.setMinWidth(50);
 		yearInput.setMaxWidth(50);
+		yearInput.setDisable(true);
 		final Tooltip gTip = new Tooltip("Greater than or equal to.");
 		final Tooltip lTip = new Tooltip("Less than or equal to.");
 
 		g = new CheckBox("<=");
 		g.setTooltip(gTip);
+		g.setDisable(true);
 		l = new CheckBox(">=");
 		l.setTooltip(lTip);
+		l.setDisable(true);
 
 		HBox yearBox = new HBox(yearInput, g, l);
 		yearBox.setSpacing(10);
@@ -89,22 +101,28 @@ public class Main extends Application {
 		ratingInput.setPromptText("Rating");
 		ratingInput.setMinWidth(50);
 		ratingInput.setMaxWidth(50);
+		ratingInput.setDisable(true);
 
-//		MenuBtn mb = new MenuBtn();
 
-		VBox vb = new VBox(fileBtn, mb.menubutton, ratingInput, yearBox, submitBtn);
+		VBox vb = new VBox(fileBtn, menuBtn.menubutton, ratingInput, yearBox, submitBtn);
 		vb.setSpacing(10);
 		vb.setPadding(new Insets(10, 50, 50, 10));
-//		vb.getStyleClass().add("vbox");
+		vb.setMaxWidth(300);
+		vb.setMinWidth(300);
+		
+		table.table.setMaxHeight(900);
+		table.table.setMinHeight(900);
+		vb.setMaxHeight(900);
+		vb.setMinHeight(900);
 		HBox hb = new HBox(table.table, vb);
 
 		final StackPane layout = new StackPane();
 		layout.getChildren().setAll(hb);
 
-		Scene scene = new Scene(layout, 1200, 900);
+		Scene scene = new Scene(layout);
 		scene.getStylesheets().add("com/flimflam/application.css");
 		stage.setScene(scene);
-		stage.setMaximized(true);
+//		stage.setMaximized(true);
 		stage.show();
 
 	}

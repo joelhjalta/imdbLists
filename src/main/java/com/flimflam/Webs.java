@@ -19,10 +19,11 @@ public class Webs  {
     	else if(json.get("Year").toString().length()==11)
     		year = json.get("Year").toString().substring(0, 4) + "-" + json.get("Year").toString().substring(7, 11);
     		
-    	this.webEngine.loadContent("<h1>"+ json.get("Title").toString() +"</h1><br>"
+//    	System.out.println("<h1><a href=\"" + URLer(json.get("imdbID").toString()) + "\"" + json.get("Title").toString() +"</a></h1><br>");
+    	this.webEngine.loadContent("<h1><a href=\"" + URLer(json.get("imdbID").toString()) + "\">" + json.get("Title").toString() +"</a></h1><br>"
     			+ "<h3>" + year + "</h3><br>"
-    			+ "<h3>" + json.get("imdbRating").toString() + "</h3><br>"
-    			+ json.get("Plot").toString() + "<br>");
+    			+ "<h3>" + json.get("imdbRating").toString() + "</h3><br><p>"
+    			+ json.get("Plot").toString() + "</p>");
         this.webEngine.setUserStyleSheetLocation(getClass().getResource("application.css").toString());
 	}
     
@@ -30,4 +31,10 @@ public class Webs  {
     	this.webEngine.loadContent("<img src=" + picURL + " alt="+"Poster"+ "style="+"width:304px;height:228px;>");
     	this.webEngine.setUserStyleSheetLocation(getClass().getResource("application.css").toString());
     }
+    
+    private String URLer(String ID){
+    	return "http://www.imdb.com/title/" + ID + "/?ref_=nv_sr_1";
+    }
 }
+
+// http://www.imdb.com/title/tt2543164/?ref_=nv_sr_1

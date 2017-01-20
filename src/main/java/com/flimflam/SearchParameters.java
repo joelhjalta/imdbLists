@@ -17,10 +17,8 @@ class SearchParameters {
 		if ((sp.imdbRating != 0.0) && !(validateRating(item, sp)))
 			return false;
 
-		else if ((sp.year != 0) && !(validateYear(item, sp))){
-//			System.out.println("Year mismatch");
+		else if ((sp.year != 0) && !(validateYear(item, sp)))
 			return false;
-		}
 
 		else if (!(sp.genres.isEmpty())&& !(validateGenre(item, sp))) 
 			return false;
@@ -69,7 +67,6 @@ class SearchParameters {
 	}
 	
 	private boolean validatePeriod(Item item, SearchParameters sp){
-		System.out.println("period");
 		int from = Integer.parseInt(item.json.get("Year").toString().substring(0, 4));
 		int to = Integer.parseInt(item.json.get("Year").toString().substring(7, 11));
 		

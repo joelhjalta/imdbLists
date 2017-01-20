@@ -42,6 +42,7 @@ public class MenuBtn {
 	    	CheckBox checkbox = new CheckBox(s);
 	    	checkbox.setOnAction(eh);
 	    	CustomMenuItem cmi = new CustomMenuItem ( checkbox ) ;
+	    	cmi.setHideOnClick(false);
 	    	menuItems.add(cmi);
 	    }
 		for(CustomMenuItem cmi: menuItems){

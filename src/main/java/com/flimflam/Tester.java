@@ -1,36 +1,38 @@
 package com.flimflam;
 
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.HttpState;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-//https://coderanch.com/t/524061/Java-program-Login-website-url
-public class Tester {
- 
-  public static void main(String args[]) throws Exception {
- 
-    HttpClient client = new HttpClient();
-    client.getParams().setParameter("j_username", "abc");
-    client.getParams().setParameter("j_password", "pqr");
- 
-    GetMethod method = new GetMethod("http://localhost:8080/");
-    try{
-      client.executeMethod(method);
-      Cookie[] cookies = client.getState().getCookies();
-      for (int i = 0; i < cookies.length; i++) {
-        Cookie cookie = cookies[i];
-        System.err.println(
-          "Cookie: " + cookie.getName() +
-          ", Value: " + cookie.getValue() +
-          ", IsPersistent?: " + cookie.isPersistent() +
-          ", Expiry Date: " + cookie.getExpiryDate() +
-          ", Comment: " + cookie.getComment());
-        }
-      client.executeMethod(method);
-    } catch(Exception e) {
-      System.err.println(e);
-    } finally {
-      method.releaseConnection();
-    }
-  }
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class Tester extends Application {
+	public static void main(String[] args) throws Exception {
+		launch(args);
+	}
+
+	public void start(final Stage stage) throws Exception {
+		ImageView imageView = new ImageView(new Image("http://www.kalahandi.info/wp-content/uploads/2016/05/sorry-image-not-available.png"));
+        imageView.setFitWidth(400);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        imageView.setOnMouseClicked(event -> {
+        	Application a = new Application() {
+
+                @Override
+                public void start(Stage stage)
+                {
+                }
+            };
+        	a.getHostServices().showDocument("http://www.google.com");
+        });
+        VBox vb = new VBox(imageView);
+//        setGraphic(imageView);
+        Scene scene = new Scene(vb, 1200, 900);
+		scene.getStylesheets().add("com/flimflam/application.css");
+		stage.setScene(scene);
+		stage.setMaximized(true);
+		stage.show();
+	}
 }
