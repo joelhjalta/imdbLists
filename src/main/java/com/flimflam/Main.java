@@ -1,15 +1,21 @@
 package com.flimflam;
 
 import java.io.File;
+import java.util.Map;
+
 import javafx.application.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 public class Main extends Application {
 
@@ -17,33 +23,33 @@ public class Main extends Application {
 	public Table table = new Table();
 	private MenuBtn menuBtn = new MenuBtn();
 	private Button submitBtn = new Button("Submit");
+	private Button resetBtn = new Button("Reset");
 	private TextField ratingInput = new TextField();
 	private TextField yearInput = new TextField();
 	private CheckBox g = null;
 	private CheckBox l = null;
 	private EventHandler<ActionEvent> eh = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-        	if (ratingInput.getText().isEmpty())
+		@Override
+		public void handle(ActionEvent event) {
+			if (ratingInput.getText().isEmpty())
 				masterList.sp.setRating(0.0);
-			else 
+			else
 				masterList.sp.setRating(Double.parseDouble(ratingInput.getText()));
-        	
-        	if(!(yearInput.getText().isEmpty()))
-        		masterList.sp.setYear(yearInput.getText(), g.isSelected(), l.isSelected());
-        	
-        	else{
-        		masterList.sp.setYear("0", false, false);
-        		g.setSelected(false);
-        		l.setSelected(false);
-        	}
-        	
-        	List search = masterList.search();
+
+			if (!(yearInput.getText().isEmpty()))
+				masterList.sp.setYear(yearInput.getText(), g.isSelected(), l.isSelected());
+
+			else {
+				masterList.sp.setYear("0", false, false);
+				g.setSelected(false);
+				l.setSelected(false);
+			}
+
+			List search = masterList.search();
 			table.table.getItems().clear();
-			table.populateTable(search);
-			
-        }
-    };
+			table.addDataToTable(search);
+		}
+	};
 
 	public static void main(String[] args) throws Exception {
 		launch(args);
@@ -51,36 +57,51 @@ public class Main extends Application {
 
 	public void start(final Stage stage) throws Exception {
 
-//		getHostServices().showDocument("http://www.google.com");
+		// getHostServices().showDocument("http://www.google.com");
 		final FileChooser fileChooser = new FileChooser();
-        final Button fileBtn = new Button("Select file");
-        fileBtn.setOnAction(
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(final ActionEvent e) {
-                    File file = fileChooser.showOpenDialog(stage);
-                    if (file != null) {
-//                        System.out.println("absolute file path: " + file.getAbsolutePath());
-                    	masterList = new List(file);
-                    	menuBtn.populateGenresList(masterList);
-                    	table.setMasterList(masterList);
-                    	table.populateTable(masterList);
-                    	
-                    	menuBtn.menubutton.setDisable(false);
-                    	submitBtn.setDisable(false);
-                    	ratingInput.setDisable(false);
-                    	yearInput.setDisable(false);
-                    	g.setDisable(false);
-                    	l.setDisable(false);
-                    }
-                }
-            });
-		
+		final Button fileBtn = new Button("Select file");
+		fileBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(final ActionEvent e) {
+				File file = fileChooser.showOpenDialog(stage);
+				if (file != null) {
+					// System.out.println("absolute file path: " +
+					// file.getAbsolutePath());
+					masterList = new List(file);
+					menuBtn.populateGenresList(masterList);
+					table.setMasterList(masterList);
+					table.addDataToTable(masterList);
+
+					menuBtn.menubutton.setDisable(false);
+					submitBtn.setDisable(false);
+					resetBtn.setDisable(false);
+					ratingInput.setDisable(false);
+					yearInput.setDisable(false);
+					g.setDisable(false);
+					l.setDisable(false);
+				}
+			}
+		});
+
 		submitBtn.setOnAction(eh);
 		submitBtn.setStyle("-fx-Alignment: center;");
 		submitBtn.setDisable(true);
 		menuBtn.menubutton.setDisable(true);
-		
+
+		resetBtn.setDisable(true);
+		resetBtn.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(final ActionEvent e) {
+				menuBtn.resetBoxes();
+				yearInput.clear();
+				ratingInput.clear();
+				g.setSelected(false);
+				l.setSelected(false);
+				masterList.sp.resetParameters();
+				table.table.getItems().clear();
+				table.addDataToTable(masterList);
+			}
+		});
+
 		yearInput.setPromptText("Year");
 		yearInput.setMinWidth(50);
 		yearInput.setMaxWidth(50);
@@ -94,22 +115,40 @@ public class Main extends Application {
 		l = new CheckBox(">=");
 		l.setTooltip(lTip);
 		l.setDisable(true);
+		
+		g.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		    	if(newValue==true)
+		    	l.setSelected(oldValue);
+		    }
+		});
+		
+		l.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		    	if(newValue==true)
+		    	g.setSelected(oldValue);
+		    }
+		});
 
 		HBox yearBox = new HBox(yearInput, g, l);
 		yearBox.setSpacing(10);
-		
+
 		ratingInput.setPromptText("Rating");
 		ratingInput.setMinWidth(50);
 		ratingInput.setMaxWidth(50);
 		ratingInput.setDisable(true);
 
+		HBox submitResetBox = new HBox(submitBtn, resetBtn);
+		submitResetBox.setSpacing(10);
 
-		VBox vb = new VBox(fileBtn, menuBtn.menubutton, ratingInput, yearBox, submitBtn);
+		VBox vb = new VBox(fileBtn, menuBtn.menubutton, ratingInput, yearBox, submitResetBox);
 		vb.setSpacing(10);
 		vb.setPadding(new Insets(10, 50, 50, 10));
 		vb.setMaxWidth(300);
 		vb.setMinWidth(300);
-		
+
 		table.table.setMaxHeight(900);
 		table.table.setMinHeight(900);
 		vb.setMaxHeight(900);
@@ -122,7 +161,7 @@ public class Main extends Application {
 		Scene scene = new Scene(layout);
 		scene.getStylesheets().add("com/flimflam/application.css");
 		stage.setScene(scene);
-//		stage.setMaximized(true);
+		// stage.setMaximized(true);
 		stage.show();
 
 	}

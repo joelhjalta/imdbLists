@@ -7,35 +7,44 @@ class SearchParameters {
 	private int year = 0;
 	private boolean g;
 	private boolean l;
+	private String type = "";
 	public HashSet<String> genres = new HashSet<String>();
 
-	// SearchParameters(){
-	//
-	// }
 
-	public boolean validateItem(Item item, SearchParameters sp) {
+	public int validateItem(Item item, SearchParameters sp) {
+		int ret = -1;
+//		if ((sp.type.length()>0) && !(validateType(item, sp)))
+//			ret = -1;
+		
 		if ((sp.imdbRating != 0.0) && !(validateRating(item, sp)))
-			return false;
+			ret = -1;
 
 		else if ((sp.year != 0) && !(validateYear(item, sp)))
-			return false;
+			ret = -1;
 
-		else if (!(sp.genres.isEmpty())&& !(validateGenre(item, sp))) 
-			return false;
+		else if (!(sp.genres.isEmpty())){ 
+			ret = (validateGenre(item, sp));
+		}
 
-		return true;
+		return ret;
 	}
 
-	private boolean validateGenre(Item item, SearchParameters sp) {
-		if (sp.genres.isEmpty())
+	private boolean validateType(Item item, SearchParameters sp){
+	
+		if(sp.type.equals(item.json.get("Type")))
 			return true;
+		return false;
+	}
+	
+	private int validateGenre(Item item, SearchParameters sp) {
+		int matches=-1;
 
 		String[] genresArr = item.json.get("Genre").toString().split(",");
 		for (String g : genresArr)
 			if (sp.genres.contains(g.trim()))
-				return true;
+				matches++;
 
-		return false;
+		return matches;
 	}
 
 	private boolean validateYear(Item item, SearchParameters sp) {
@@ -85,8 +94,16 @@ class SearchParameters {
 
 		return false;
 	}
-	
-	public void setYear(String yearInput, boolean gInput, boolean lInput){
+
+	public void resetParameters(){
+		 this.imdbRating = 0.0;
+		 this.year = 0;
+		 this.g = false;
+		 this.l = false;
+		 genres.clear();
+	}
+
+	public void setYear(String yearInput, boolean gInput, boolean lInput) {
 		this.year = Integer.parseInt(yearInput);
 		this.g = gInput;
 		this.l = lInput;
@@ -110,6 +127,14 @@ class SearchParameters {
 	
 	public int getYear(){
 		return this.year;
+	}
+	
+	public void setG(boolean setting){
+		this.g = setting;
+	}
+	
+	public void setL(boolean setting){
+		this.l = setting;
 	}
 
 }

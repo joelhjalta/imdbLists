@@ -28,7 +28,6 @@ class Item {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-//			System.out.println("Title: " + this.json.get("Title"));
 			checkPoster();
 			this.pair = pair(new Webs(this.json), new Image(this.json.get("Poster").toString()));
 	}

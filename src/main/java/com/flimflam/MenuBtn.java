@@ -10,6 +10,7 @@ import javafx.scene.control.MenuButton;
 
 public class MenuBtn {
 	public MenuButton menubutton = new MenuButton ("Genre") ;
+	private ArrayList<CheckBox> boxes = new ArrayList<CheckBox>();
 	private List master;
 	private EventHandler<ActionEvent> eh = new EventHandler<ActionEvent>() {
         @Override
@@ -35,12 +36,19 @@ public class MenuBtn {
 		
 	}
 	
+	public void resetBoxes(){
+		for (CheckBox cb : this.boxes) {
+			cb.setSelected(false);
+		}
+	}
+	
 	public void populateGenresList(List list){
 		master = list;
 		ArrayList<CustomMenuItem> menuItems = new ArrayList<CustomMenuItem>();
 		for(String s: list.genres){
 	    	CheckBox checkbox = new CheckBox(s);
 	    	checkbox.setOnAction(eh);
+	    	this.boxes.add(checkbox);
 	    	CustomMenuItem cmi = new CustomMenuItem ( checkbox ) ;
 	    	cmi.setHideOnClick(false);
 	    	menuItems.add(cmi);
