@@ -50,14 +50,14 @@ public class Table {
 		if (search.searchLists.isEmpty()) {
 			System.out.println("List was empty, loading master list.");
 			search = master;
-			System.out.println("Loading " + search.data.size() + "elements to table.");
+			System.out.println("Loading " + search.data.size() + " elements to table.");
 			table.getItems().addAll(search.data);
 		}
 
 		else
 			for (Map.Entry<Integer, ObservableList<Pair<WebView, Object>>> entry : search.searchLists.entrySet()){
 				table.getItems().addAll(entry.getValue());
-				System.out.println("Loading " + entry.getValue().size() + "elements to table.");
+				System.out.println("Loading " + entry.getValue().size() + " elements to table.");
 			}
 
 		// table.setPrefHeight(275);

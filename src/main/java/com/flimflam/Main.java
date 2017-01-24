@@ -28,6 +28,8 @@ public class Main extends Application {
 	private TextField yearInput = new TextField();
 	private CheckBox g = null;
 	private CheckBox l = null;
+	private CheckBox tv = null;
+	private CheckBox mov = null;
 	private EventHandler<ActionEvent> eh = new EventHandler<ActionEvent>() {
 		@Override
 		public void handle(ActionEvent event) {
@@ -44,6 +46,9 @@ public class Main extends Application {
 				g.setSelected(false);
 				l.setSelected(false);
 			}
+			
+			masterList.sp.setMov(tv.isSelected());
+			masterList.sp.setTV(mov.isSelected());
 
 			List search = masterList.search();
 			table.table.getItems().clear();
@@ -79,9 +84,35 @@ public class Main extends Application {
 					yearInput.setDisable(false);
 					g.setDisable(false);
 					l.setDisable(false);
+					tv.setDisable(false);
+					mov.setDisable(false);
 				}
 			}
 		});
+		
+		tv = new CheckBox("TV");
+		tv.setDisable(true);
+		mov = new CheckBox("Movies");
+		mov.setDisable(true);
+		
+		tv.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		    	if(newValue==true)
+		    	mov.setSelected(oldValue);
+		    }
+		});
+		
+		mov.selectedProperty().addListener(new ChangeListener<Boolean>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		    	if(newValue==true)
+		    	tv.setSelected(oldValue);
+		    }
+		});
+		
+		HBox typesBox = new HBox(tv, mov);
+		typesBox.setSpacing(10);
 
 		submitBtn.setOnAction(eh);
 		submitBtn.setStyle("-fx-Alignment: center;");
@@ -96,6 +127,8 @@ public class Main extends Application {
 				ratingInput.clear();
 				g.setSelected(false);
 				l.setSelected(false);
+				tv.setSelected(false);
+				mov.setSelected(false);
 				masterList.sp.resetParameters();
 				table.table.getItems().clear();
 				table.addDataToTable(masterList);
@@ -143,7 +176,7 @@ public class Main extends Application {
 		HBox submitResetBox = new HBox(submitBtn, resetBtn);
 		submitResetBox.setSpacing(10);
 
-		VBox vb = new VBox(fileBtn, menuBtn.menubutton, ratingInput, yearBox, submitResetBox);
+		VBox vb = new VBox(fileBtn, typesBox, menuBtn.menubutton, ratingInput, yearBox, submitResetBox);
 		vb.setSpacing(10);
 		vb.setPadding(new Insets(10, 50, 50, 10));
 		vb.setMaxWidth(300);
