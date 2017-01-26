@@ -1,7 +1,11 @@
 package com.flimflam;
 
+import java.util.Iterator;
+import java.util.TreeMap;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -13,29 +17,20 @@ public class Tester extends Application {
 	}
 
 	public void start(final Stage stage) throws Exception {
-		ImageView imageView = new ImageView(new Image("http://www.kalahandi.info/wp-content/uploads/2016/05/sorry-image-not-available.png"));
-        imageView.setFitWidth(400);
-        imageView.setPreserveRatio(true);
-        imageView.setSmooth(true);
-        imageView.setOnMouseClicked(event -> {
-        	Application a = new Application() {
-
-                @Override
-                public void start(Stage stage)
-                {
-                }
-            };
-        	a.getHostServices().showDocument("http://www.google.com");
-        });
-        VBox vb = new VBox(imageView);
+		TreeMap<String, String> ts = new TreeMap<String, String>();
+		ts.put("Jim Carrey", "The Mask");
+		ts.put("Jim Carrey", "Liar Liar");
+		ts.put("Kate Beckinsale", "Underworld");
+		Iterator iterator = ts.entrySet().iterator();
+		
+		
+        TextField input = new TextField();
+        input.setPromptText("Actor name");
 //        setGraphic(imageView);
-        Scene scene = new Scene(vb, 1200, 900);
+        Scene scene = new Scene(input);
 		scene.getStylesheets().add("com/flimflam/application.css");
 		stage.setScene(scene);
-		stage.setMaximized(true);
-//		stage.show();
-		
-		boolean test = true;
-		if(test)System.out.println("test works");
+//		stage.setMaximized(true);
+		stage.show();
 	}
 }
