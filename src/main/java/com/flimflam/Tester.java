@@ -33,6 +33,9 @@ public class Tester extends Application {
 		scene.getStylesheets().add("com/flimflam/application.css");
 		stage.setScene(scene);
 		stage.setMaximized(true);
-		stage.show();
+//		stage.show();
+		
+		boolean test = true;
+		if(test)System.out.println("test works");
 	}
 }

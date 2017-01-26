@@ -47,8 +47,8 @@ public class Main extends Application {
 				l.setSelected(false);
 			}
 			
-			masterList.sp.setMov(tv.isSelected());
-			masterList.sp.setTV(mov.isSelected());
+//			masterList.sp.setMov(mov.isSelected());
+//			masterList.sp.setTV(tv.isSelected());
 
 			List search = masterList.search();
 			table.table.getItems().clear();
@@ -100,6 +100,7 @@ public class Main extends Application {
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	if(newValue==true)
 		    	mov.setSelected(oldValue);
+		    	masterList.sp.setMov(oldValue);
 		    }
 		});
 		
@@ -108,6 +109,7 @@ public class Main extends Application {
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	if(newValue==true)
 		    	tv.setSelected(oldValue);
+		    	masterList.sp.setTV(oldValue);
 		    }
 		});
 		

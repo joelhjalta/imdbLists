@@ -42,8 +42,8 @@ public class List {
 
 	public List search() {
 		List tmpList = new List();
-		if ((sp.genres.isEmpty()) && (sp.getIMDBRating() == 0.0) && (sp.getYear() == 0)) {
-			// System.out.println("sp empty");
+		if(this.sp.isEmpty()) {
+			 System.out.println("sp empty");
 			return tmpList;
 		}
 		for (Item item : this.arrList) {

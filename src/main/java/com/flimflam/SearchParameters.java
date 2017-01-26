@@ -13,9 +13,11 @@ class SearchParameters {
 
 	public int validateItem(Item item, SearchParameters sp) {
 		int ret = 0;
-		System.out.println("this.tv: " + this.tv + " this.mov " + this.mov);
-		if (!(this.tv && this.mov) && !(validateType(item, sp)))
+//		System.out.println("sp.tv: " + sp.tv + " sp.mov " + sp.mov);
+		if (!(sp.tv && sp.mov) && !(validateType(item, sp))){
+//			System.out.println("type mismatch");
 			return -1;
+		}
 
 		else if ((sp.imdbRating != 0.0) && !(validateRating(item, sp)))
 			return -1;
@@ -24,7 +26,7 @@ class SearchParameters {
 			return -1;
 
 		else if (!(sp.genres.isEmpty())) {
-			System.out.println("genres empty");
+//			System.out.println("genres empty");
 			ret = (validateGenre(item, sp));
 		}
 
@@ -32,11 +34,11 @@ class SearchParameters {
 	}
 
 	private boolean validateType(Item item, SearchParameters sp) {
-		System.out.println(item.json.get("Type").toString() + " - sp.tv: " + sp.tv + " sp.mov: " + sp.mov);
-		if (sp.tv && (item.json.get("Type").toString().equals("series")))
+//		System.out.println(item.json.get("Type").toString() + " - sp.tv: " + sp.tv + " sp.mov: " + sp.mov);
+		if ((sp.tv) && !(sp.mov) && (item.json.get("Type").toString().equals("series")))
 			return true;
 		
-		else if(sp.mov && (item.json.get("Type").toString().equals("movie")))
+		else if((sp.mov) && !(sp.tv) && (item.json.get("Type").toString().equals("movie")))
 			return true;
 		
 		return false;
@@ -150,15 +152,25 @@ class SearchParameters {
 	}
 
 	public void setTV(boolean setting) {
-		System.out.println("tv set to " + setting + " and mov to " + !(setting));
 		this.tv = setting;
-		this.mov = !(setting);
 	}
 
 	public void setMov(boolean setting) {
-		System.out.println("mov set to " + setting + " and tv to " + !(setting));
 		this.mov = setting;
-		this.mov = !(setting);
+	}
+	
+	public boolean getTV(){
+		return this.tv;
+	}
+	
+	public boolean getMov(){
+		return this.mov;
+	}
+	
+	public boolean isEmpty(){
+		if ((this.genres.isEmpty()) && (this.getIMDBRating() == 0.0) && (this.getYear() == 0) && (this.tv && this.mov))
+			return true;
+		else return false;
 	}
 
 }
