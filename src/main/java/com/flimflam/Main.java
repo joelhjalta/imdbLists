@@ -1,21 +1,21 @@
 package com.flimflam;
 
 import java.io.File;
-import java.util.Map;
+import java.util.TreeSet;
 
 import javafx.application.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
 public class Main extends Application {
 
@@ -26,6 +26,9 @@ public class Main extends Application {
 	private Button resetBtn = new Button("Reset");
 	private TextField ratingInput = new TextField();
 	private TextField yearInput = new TextField();
+	private ComboBox<String> combo = new ComboBox<>();
+	private ObservableList<String> actorsList = FXCollections.observableArrayList();
+//	private TreeSet<String> actors = new TreeSet<String>();
 	private CheckBox g = null;
 	private CheckBox l = null;
 	private CheckBox tv = null;
@@ -47,12 +50,11 @@ public class Main extends Application {
 				l.setSelected(false);
 			}
 			
-//			masterList.sp.setMov(mov.isSelected());
-//			masterList.sp.setTV(tv.isSelected());
-
 			List search = masterList.search();
 			table.table.getItems().clear();
 			table.addDataToTable(search);
+			
+			System.out.println(combo.getEditor().getText());
 		}
 	};
 
@@ -86,9 +88,21 @@ public class Main extends Application {
 					l.setDisable(false);
 					tv.setDisable(false);
 					mov.setDisable(false);
+					combo.setDisable(false);
 				}
+				
+				actorsList.setAll(masterList.actors);
+				combo.setItems(actorsList);
+				fileBtn.setDisable(true);
+//				for(String s: masterList.actors.keySet())
+//					System.out.println(s);
 			}
 		});
+		
+		
+		
+        combo.setDisable(true);
+        new AutoCompleteComboBoxListener(combo);
 		
 		tv = new CheckBox("TV");
 		tv.setDisable(true);
@@ -178,7 +192,7 @@ public class Main extends Application {
 		HBox submitResetBox = new HBox(submitBtn, resetBtn);
 		submitResetBox.setSpacing(10);
 
-		VBox vb = new VBox(fileBtn, typesBox, menuBtn.menubutton, ratingInput, yearBox, submitResetBox);
+		VBox vb = new VBox(fileBtn, typesBox, menuBtn.menubutton, ratingInput, yearBox, combo, submitResetBox);
 		vb.setSpacing(10);
 		vb.setPadding(new Insets(10, 50, 50, 10));
 		vb.setMaxWidth(300);
@@ -198,7 +212,7 @@ public class Main extends Application {
 		stage.setScene(scene);
 		// stage.setMaximized(true);
 		stage.show();
-
+		
 	}
 
 	public void printArray(String[] arr) {

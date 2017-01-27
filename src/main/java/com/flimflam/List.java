@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +23,7 @@ public class List {
 	public ObservableList<Pair<WebView, Object>> data = FXCollections.observableArrayList();
 	public ArrayList<Item> arrList = new ArrayList<>();
 	public HashSet<String> genres = new HashSet<String>();
+	public TreeSet<String> actors = new TreeSet<String>();
 	public TreeMap<Integer, ObservableList<Pair<WebView, Object>>> searchLists = new TreeMap<Integer, ObservableList<Pair<WebView, Object>>>(
 			Collections.reverseOrder());
 	public SearchParameters sp;
@@ -63,9 +65,11 @@ public class List {
 	}
 
 	public void readCSV(File file) {
-		String csvFile = "src/main/resources/com/flimflam/" + file;
+//		String csvFile = "src/main/resources/com/flimflam/" + file;
 		String line = "";
 		String genresStr = "";
+		String actorsStr = "";
+		String[] actorsArr;
 		String[] genresArr;
 
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -76,10 +80,19 @@ public class List {
 					continue;
 				FetchItem fi = new FetchItem(values[1].substring(1, values[1].length() - 1));
 				Item item = new Item(fi.itemString);
+				
 				genresStr = item.json.get("Genre").toString();
 				genresArr = genresStr.split(", ");
 				for (String s : genresArr)
 					this.genres.add(s);
+				
+				actorsStr = item.json.get("Actors").toString();
+				actorsArr = actorsStr.split(", ");
+				for (String s : actorsArr){
+//					System.out.println("-" + s+  "-");
+					this.actors.add(s);
+				}
+				
 				add(item);
 			}
 

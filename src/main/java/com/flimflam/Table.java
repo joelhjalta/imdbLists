@@ -1,8 +1,6 @@
 package com.flimflam;
 
 import java.util.Map;
-import java.util.TreeMap;
-
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
