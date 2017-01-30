@@ -7,6 +7,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+//http://stackoverflow.com/questions/38871580/javafx-autocomplete-combobox-drop-down-size
+//http://stackoverflow.com/questions/19924852/autocomplete-combobox-in-javafx/20282301#20282301
+
 public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
 
     private ComboBox<T> comboBox;
