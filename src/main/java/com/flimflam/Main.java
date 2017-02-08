@@ -13,6 +13,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -54,10 +56,11 @@ public class Main extends Application {
 			table.table.getItems().clear();
 			table.addDataToTable(search);
 			
-			System.out.println(combo.getEditor().getText());
+			System.out.println("combo: " + FxUtilTest.getComboBoxValue(combo));
+//			System.out.println(combo.getEditor().getText());
 		}
 	};
-
+	
 	public static void main(String[] args) throws Exception {
 		launch(args);
 	}
@@ -102,7 +105,25 @@ public class Main extends Application {
 		
 		
         combo.setDisable(true);
-        new AutoCompleteComboBoxListener(combo);
+        
+//        final EventHandler<KeyEvent> keyEventHandler =
+//                new EventHandler<KeyEvent>() {
+//                    public void handle(final KeyEvent keyEvent) {
+//                        if (keyEvent.getCode() == KeyCode.ENTER) {
+////                            setPressed(keyEvent.getEventType()
+////                                == KeyEvent.KEY_PRESSED);
+//                        	System.out.println("combo: " + FxUtilTest.getComboBoxValue(combo));
+//                            keyEvent.consume();
+//                        }
+//                    }
+//                };
+//         
+//            combo.setOnKeyPressed(keyEventHandler);
+//            combo.setOnKeyReleased(keyEventHandler);
+//        FxUtilTest.autoCompleteComboBoxPlus(combo, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) 
+//        		|| itemToCompare.getAge().toString().equals(typedText));
+
+//        new AutoCompleteComboBoxListener(combo);
 		
 		tv = new CheckBox("TV");
 		tv.setDisable(true);
