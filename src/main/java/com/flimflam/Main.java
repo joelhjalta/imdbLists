@@ -51,13 +51,14 @@ public class Main extends Application {
 				g.setSelected(false);
 				l.setSelected(false);
 			}
+			if (FxUtilTest.getComboBoxValue(combo) != null)
+				masterList.sp.setActor(FxUtilTest.getComboBoxValue(combo));
 			
 			List search = masterList.search();
 			table.table.getItems().clear();
 			table.addDataToTable(search);
 			
-			System.out.println("combo: " + FxUtilTest.getComboBoxValue(combo));
-//			System.out.println(combo.getEditor().getText());
+			
 		}
 	};
 	
@@ -80,7 +81,7 @@ public class Main extends Application {
 					masterList = new List(file);
 					menuBtn.populateGenresList(masterList);
 					table.setMasterList(masterList);
-					table.addDataToTable(masterList);
+					table.loadMasterList();
 
 					menuBtn.menubutton.setDisable(false);
 					submitBtn.setDisable(false);
@@ -92,11 +93,12 @@ public class Main extends Application {
 					tv.setDisable(false);
 					mov.setDisable(false);
 					combo.setDisable(false);
+					actorsList.setAll(masterList.actors);
+					combo.setItems(actorsList);
+					fileBtn.setDisable(true);
 				}
+				else System.out.println("file error");
 				
-				actorsList.setAll(masterList.actors);
-				combo.setItems(actorsList);
-				fileBtn.setDisable(true);
 //				for(String s: masterList.actors.keySet())
 //					System.out.println(s);
 			}
@@ -166,6 +168,7 @@ public class Main extends Application {
 				l.setSelected(false);
 				tv.setSelected(false);
 				mov.setSelected(false);
+				combo.getSelectionModel().clearSelection();
 				masterList.sp.resetParameters();
 				table.table.getItems().clear();
 				table.addDataToTable(masterList);

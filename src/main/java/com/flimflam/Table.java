@@ -46,20 +46,27 @@ public class Table {
 
 	public void addDataToTable(List search) {
 		if (search.searchLists.isEmpty()) {
-			System.out.println("List was empty, loading master list.");
-			search = master;
-			System.out.println("Loading " + search.data.size() + " elements to table.");
-			table.getItems().addAll(search.data);
+			System.out.println("No searchLists, loading master list.");
+//			search = master;
+//			System.out.println("Loading " + search.data.size() + " elements to table.");
+//			table.getItems().addAll(search.data);
+			
+			this.loadMasterList();
 		}
 
 		else
-			for (Map.Entry<Integer, ObservableList<Pair<WebView, Object>>> entry : search.searchLists.entrySet()){
+			for (Map.Entry<Integer, ObservableList<Pair<WebView, Object>>> entry : search.searchLists.entrySet()) {
 				table.getItems().addAll(entry.getValue());
 				System.out.println("Loading " + entry.getValue().size() + " elements to table.");
 			}
 
 		// table.setPrefHeight(275);
-//		table.getItems().setAll(list.data);
+		// table.getItems().setAll(list.data);
+	}
+
+	public void loadMasterList() {
+		System.out.println("Loading " + master.data.size() + " elements to table.");
+		table.getItems().addAll(master.data);
 	}
 
 	public void setMasterList(List list) {

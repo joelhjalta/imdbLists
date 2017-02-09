@@ -10,12 +10,13 @@ class SearchParameters {
 	public HashSet<String> genres = new HashSet<String>();
 	private boolean tv = true;
 	private boolean mov = true;
+	private String actor = "";
 
 	public int validateItem(Item item, SearchParameters sp) {
 		int ret = 0;
-//		System.out.println("sp.tv: " + sp.tv + " sp.mov " + sp.mov);
-		if (!(sp.tv && sp.mov) && !(validateType(item, sp))){
-//			System.out.println("type mismatch");
+//		System.out.println("sp.actor isEmpty:" + sp.actor.isEmpty());
+		if (!(sp.tv && sp.mov) && !(validateType(item, sp))) {
+			// System.out.println("type mismatch");
 			return -1;
 		}
 
@@ -24,9 +25,12 @@ class SearchParameters {
 
 		else if ((sp.year != 0) && !(validateYear(item, sp)))
 			return -1;
+		
+		else if (!(sp.actor.isEmpty()) && !validateActor(item, sp))
+			return -1;
 
 		else if (!(sp.genres.isEmpty())) {
-//			System.out.println("genres empty");
+			// System.out.println("genres empty");
 			ret = (validateGenre(item, sp));
 		}
 
@@ -34,13 +38,14 @@ class SearchParameters {
 	}
 
 	private boolean validateType(Item item, SearchParameters sp) {
-//		System.out.println(item.json.get("Type").toString() + " - sp.tv: " + sp.tv + " sp.mov: " + sp.mov);
+		// System.out.println(item.json.get("Type").toString() + " - sp.tv: " +
+		// sp.tv + " sp.mov: " + sp.mov);
 		if ((sp.tv) && !(sp.mov) && (item.json.get("Type").toString().equals("series")))
 			return true;
-		
-		else if((sp.mov) && !(sp.tv) && (item.json.get("Type").toString().equals("movie")))
+
+		else if ((sp.mov) && !(sp.tv) && (item.json.get("Type").toString().equals("movie")))
 			return true;
-		
+
 		return false;
 	}
 
@@ -53,6 +58,22 @@ class SearchParameters {
 				matches++;
 
 		return matches;
+	}
+
+	private boolean validateActor(Item item, SearchParameters sp) {
+//		System.out.println("Validating actor");
+		if (sp.actor.isEmpty()){
+//			System.out.println("sp.actor isEmpty");
+			return true;
+		}
+
+		 else if(item.json.get("Actors").toString().contains(sp.actor)){
+//			 System.out.println("Actor match - sp.actor:" + sp.actor + " item actor:" + item.json.get("Actors").toString());
+			 return true;
+		 }
+
+//		System.out.println("Actor mismatch, returning false");
+		return false;
 	}
 
 	private boolean validateYear(Item item, SearchParameters sp) {
@@ -73,7 +94,7 @@ class SearchParameters {
 
 		// System.out.println("y: " + y);
 		if (y == sp.year) {
-//			System.out.println("y: " + y + " sp.year: " + sp.year);
+			// System.out.println("y: " + y + " sp.year: " + sp.year);
 			return true;
 		}
 
@@ -114,7 +135,8 @@ class SearchParameters {
 		this.l = false;
 		this.tv = true;
 		this.mov = true;
-		genres.clear();
+		this.genres.clear();
+		this.actor = "";
 	}
 
 	public void setYear(String yearInput, boolean gInput, boolean lInput) {
@@ -158,19 +180,28 @@ class SearchParameters {
 	public void setMov(boolean setting) {
 		this.mov = setting;
 	}
-	
-	public boolean getTV(){
+
+	public boolean getTV() {
 		return this.tv;
 	}
-	
-	public boolean getMov(){
+
+	public boolean getMov() {
 		return this.mov;
 	}
-	
-	public boolean isEmpty(){
-		if ((this.genres.isEmpty()) && (this.getIMDBRating() == 0.0) && (this.getYear() == 0) && (this.tv && this.mov))
+
+	public String getActor() {
+		return this.actor;
+	}
+
+	public void setActor(String name) {
+		this.actor = name;
+	}
+
+	public boolean isEmpty() {
+		if ((this.genres.isEmpty()) && (this.getIMDBRating() == 0.0) && (this.getYear() == 0) && (this.tv && this.mov) && (this.actor.isEmpty()))
 			return true;
-		else return false;
+		else
+			return false;
 	}
 
 }
