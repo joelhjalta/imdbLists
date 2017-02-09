@@ -3,6 +3,7 @@ package com.flimflam;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,8 +45,8 @@ public class List {
 
 	public List search() {
 		List tmpList = new List();
-		if(this.sp.isEmpty()) {
-			 System.out.println("sp empty");
+		if (this.sp.isEmpty()) {
+			System.out.println("sp empty");
 			return tmpList;
 		}
 		for (Item item : this.arrList) {
@@ -65,7 +66,7 @@ public class List {
 	}
 
 	public void readCSV(File file) {
-//		String csvFile = "src/main/resources/com/flimflam/" + file;
+		// String csvFile = "src/main/resources/com/flimflam/" + file;
 		String line = "";
 		String genresStr = "";
 		String actorsStr = "";
@@ -74,25 +75,31 @@ public class List {
 
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
+			FileWriter fil = new FileWriter("file1.txt");
+
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
 				if (values[0].toLowerCase().trim().equals("\"position\""))
 					continue;
 				FetchItem fi = new FetchItem(values[1].substring(1, values[1].length() - 1));
 				Item item = new Item(fi.itemString);
-				
+
+				fil.write(item.json.toJSONString());
+				System.out.println("Successfully Copied JSON Object to File...");
+				System.out.println("\nJSON Object: " + item);
+
 				genresStr = item.json.get("Genre").toString();
 				genresArr = genresStr.split(", ");
 				for (String s : genresArr)
 					this.genres.add(s);
-				
+
 				actorsStr = item.json.get("Actors").toString();
 				actorsArr = actorsStr.split(", ");
-				for (String s : actorsArr){
-//					System.out.println("-" + s+  "-");
+				for (String s : actorsArr) {
+					// System.out.println("-" + s+ "-");
 					this.actors.add(s);
 				}
-				
+
 				add(item);
 			}
 
