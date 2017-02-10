@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	public List masterList;
+	public List masterList = new List();
 	public Table table = new Table();
 	private MenuBtn menuBtn = new MenuBtn();
 	private Button submitBtn = new Button("Submit");
@@ -68,6 +68,13 @@ public class Main extends Application {
 
 	public void start(final Stage stage) throws Exception {
 
+		masterList.readPreMaster();
+		menuBtn.populateGenresList(masterList);
+		table.setMasterList(masterList);
+		table.loadMasterList();
+		actorsList.setAll(masterList.actors);
+		combo.setItems(actorsList);
+		
 		// getHostServices().showDocument("http://www.google.com");
 		final FileChooser fileChooser = new FileChooser();
 		final Button fileBtn = new Button("Select file");
@@ -83,19 +90,20 @@ public class Main extends Application {
 					table.setMasterList(masterList);
 					table.loadMasterList();
 
-					menuBtn.menubutton.setDisable(false);
-					submitBtn.setDisable(false);
-					resetBtn.setDisable(false);
-					ratingInput.setDisable(false);
-					yearInput.setDisable(false);
-					g.setDisable(false);
-					l.setDisable(false);
-					tv.setDisable(false);
-					mov.setDisable(false);
-					combo.setDisable(false);
+//					menuBtn.menubutton.setDisable(false);
+//					submitBtn.setDisable(false);
+//					resetBtn.setDisable(false);
+//					ratingInput.setDisable(false);
+//					yearInput.setDisable(false);
+//					g.setDisable(false);
+//					l.setDisable(false);
+//					tv.setDisable(false);
+//					mov.setDisable(false);
+//					combo.setDisable(false);
+					
 					actorsList.setAll(masterList.actors);
 					combo.setItems(actorsList);
-					fileBtn.setDisable(true);
+//					fileBtn.setDisable(true);
 				}
 				else System.out.println("file error");
 				
@@ -106,7 +114,7 @@ public class Main extends Application {
 		
 		
 		
-        combo.setDisable(true);
+//        combo.setDisable(true);
         
 //        final EventHandler<KeyEvent> keyEventHandler =
 //                new EventHandler<KeyEvent>() {
@@ -128,9 +136,9 @@ public class Main extends Application {
 //        new AutoCompleteComboBoxListener(combo);
 		
 		tv = new CheckBox("TV");
-		tv.setDisable(true);
+//		tv.setDisable(true);
 		mov = new CheckBox("Movies");
-		mov.setDisable(true);
+//		mov.setDisable(true);
 		
 		tv.selectedProperty().addListener(new ChangeListener<Boolean>() {
 		    @Override
@@ -155,10 +163,10 @@ public class Main extends Application {
 
 		submitBtn.setOnAction(eh);
 		submitBtn.setStyle("-fx-Alignment: center;");
-		submitBtn.setDisable(true);
+//		submitBtn.setDisable(true);
 		menuBtn.menubutton.setDisable(true);
 
-		resetBtn.setDisable(true);
+//		resetBtn.setDisable(true);
 		resetBtn.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(final ActionEvent e) {
 				menuBtn.resetBoxes();
@@ -178,16 +186,16 @@ public class Main extends Application {
 		yearInput.setPromptText("Year");
 		yearInput.setMinWidth(50);
 		yearInput.setMaxWidth(50);
-		yearInput.setDisable(true);
+//		yearInput.setDisable(true);
 		final Tooltip gTip = new Tooltip("Greater than or equal to.");
 		final Tooltip lTip = new Tooltip("Less than or equal to.");
 
 		g = new CheckBox("<=");
 		g.setTooltip(gTip);
-		g.setDisable(true);
+//		g.setDisable(true);
 		l = new CheckBox(">=");
 		l.setTooltip(lTip);
-		l.setDisable(true);
+//		l.setDisable(true);
 		
 		g.selectedProperty().addListener(new ChangeListener<Boolean>() {
 		    @Override
@@ -211,7 +219,7 @@ public class Main extends Application {
 		ratingInput.setPromptText("Rating");
 		ratingInput.setMinWidth(50);
 		ratingInput.setMaxWidth(50);
-		ratingInput.setDisable(true);
+//		ratingInput.setDisable(true);
 
 		HBox submitResetBox = new HBox(submitBtn, resetBtn);
 		submitResetBox.setSpacing(10);

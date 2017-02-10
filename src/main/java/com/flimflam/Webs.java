@@ -21,7 +21,8 @@ public class Webs  {
     	this.webEngine.loadContent("<h1><a href=\"" + URLer(json.get("imdbID").toString()) + "\">" + json.get("Title").toString() +"</a></h1><br>"
     			+ "<h3>" + year + "</h3><br>"
     			+ "<h3>" + json.get("imdbRating").toString() + "</h3><br>"
-    			+ "<h3>" + json.get("Genre").toString() + "</h3><br><p>"
+    			+ "<h3>" + json.get("Genre").toString() + "</h3><br>"
+    			+ json.get("Actors").toString() + "<br><p>"
     			+ json.get("Plot").toString() + "</p>");
         this.webEngine.setUserStyleSheetLocation(getClass().getResource("application.css").toString());
 	}
