@@ -21,47 +21,21 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	public List masterList = new List();
+	public List masterList = new List(true);
 	public Table table = new Table();
-	private MenuBtn menuBtn = new MenuBtn();
-	private Button submitBtn = new Button("Submit");
-	private Button resetBtn = new Button("Reset");
-	private TextField ratingInput = new TextField();
-	private TextField yearInput = new TextField();
-	private ComboBox<String> combo = new ComboBox<>();
-	private ObservableList<String> actorsList = FXCollections.observableArrayList();
-//	private TreeSet<String> actors = new TreeSet<String>();
-	private CheckBox g = null;
-	private CheckBox l = null;
-	private CheckBox tv = null;
-	private CheckBox mov = null;
-	private EventHandler<ActionEvent> eh = new EventHandler<ActionEvent>() {
-		@Override
-		public void handle(ActionEvent event) {
-			if (ratingInput.getText().isEmpty())
-				masterList.sp.setRating(0.0);
-			else
-				masterList.sp.setRating(Double.parseDouble(ratingInput.getText()));
+	public Controls controls;
+//	private MenuBtn menuBtn = new MenuBtn();
+//	private Button submitBtn = new Button("Submit");
+//	private Button resetBtn = new Button("Reset");
+//	private TextField ratingInput = new TextField();
+//	private TextField yearInput = new TextField();
+//	private ComboBox<String> combo = new ComboBox<>();
+//	private ObservableList<String> actorsList = FXCollections.observableArrayList();
+//	private CheckBox g = null;
+//	private CheckBox l = null;
+//	private CheckBox tv = null;
+//	private CheckBox mov = null;
 
-			if (!(yearInput.getText().isEmpty()))
-				masterList.sp.setYear(yearInput.getText(), g.isSelected(), l.isSelected());
-
-			else {
-				masterList.sp.setYear("0", false, false);
-				g.setSelected(false);
-				l.setSelected(false);
-			}
-			if (FxUtilTest.getComboBoxValue(combo) != null)
-				masterList.sp.setActor(FxUtilTest.getComboBoxValue(combo));
-			
-			List search = masterList.search();
-			table.table.getItems().clear();
-			table.addDataToTable(search);
-			
-			
-		}
-	};
-	
 	public static void main(String[] args) throws Exception {
 		launch(args);
 	}
@@ -69,162 +43,94 @@ public class Main extends Application {
 	public void start(final Stage stage) throws Exception {
 
 		masterList.readPreMaster();
-		menuBtn.populateGenresList(masterList);
+		controls = new Controls(masterList, table);
+//		controls.populateGenresList();
 		table.setMasterList(masterList);
 		table.loadMasterList();
-		actorsList.setAll(masterList.actors);
-		combo.setItems(actorsList);
-		
+		controls.actorsList.setAll(masterList.actors);
+		controls.combo.setItems(controls.actorsList);
+
 		// getHostServices().showDocument("http://www.google.com");
-		final FileChooser fileChooser = new FileChooser();
-		final Button fileBtn = new Button("Select file");
-		fileBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(final ActionEvent e) {
-				File file = fileChooser.showOpenDialog(stage);
-				if (file != null) {
-					// System.out.println("absolute file path: " +
-					// file.getAbsolutePath());
-					masterList = new List(file);
-					menuBtn.populateGenresList(masterList);
-					table.setMasterList(masterList);
-					table.loadMasterList();
+//		final FileChooser fileChooser = new FileChooser();
+//		final Button fileBtn = new Button("Select file");
+//		fileBtn.setOnAction(fileOpenEH);
 
-//					menuBtn.menubutton.setDisable(false);
-//					submitBtn.setDisable(false);
-//					resetBtn.setDisable(false);
-//					ratingInput.setDisable(false);
-//					yearInput.setDisable(false);
-//					g.setDisable(false);
-//					l.setDisable(false);
-//					tv.setDisable(false);
-//					mov.setDisable(false);
-//					combo.setDisable(false);
-					
-					actorsList.setAll(masterList.actors);
-					combo.setItems(actorsList);
-//					fileBtn.setDisable(true);
-				}
-				else System.out.println("file error");
-				
-//				for(String s: masterList.actors.keySet())
-//					System.out.println(s);
-			}
-		});
-		
-		
-		
-//        combo.setDisable(true);
-        
-//        final EventHandler<KeyEvent> keyEventHandler =
-//                new EventHandler<KeyEvent>() {
-//                    public void handle(final KeyEvent keyEvent) {
-//                        if (keyEvent.getCode() == KeyCode.ENTER) {
-////                            setPressed(keyEvent.getEventType()
-////                                == KeyEvent.KEY_PRESSED);
-//                        	System.out.println("combo: " + FxUtilTest.getComboBoxValue(combo));
-//                            keyEvent.consume();
-//                        }
-//                    }
-//                };
-//         
-//            combo.setOnKeyPressed(keyEventHandler);
-//            combo.setOnKeyReleased(keyEventHandler);
-//        FxUtilTest.autoCompleteComboBoxPlus(combo, (typedText, itemToCompare) -> itemToCompare.getName().toLowerCase().contains(typedText.toLowerCase()) 
-//        		|| itemToCompare.getAge().toString().equals(typedText));
+//		controls.tv = new CheckBox("TV");
+//		controls.mov = new CheckBox("Movies");
 
-//        new AutoCompleteComboBoxListener(combo);
-		
-		tv = new CheckBox("TV");
-//		tv.setDisable(true);
-		mov = new CheckBox("Movies");
-//		mov.setDisable(true);
-		
-		tv.selectedProperty().addListener(new ChangeListener<Boolean>() {
-		    @Override
-		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-		    	if(newValue==true)
-		    	mov.setSelected(oldValue);
-		    	masterList.sp.setMov(oldValue);
-		    }
-		});
-		
-		mov.selectedProperty().addListener(new ChangeListener<Boolean>() {
-		    @Override
-		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-		    	if(newValue==true)
-		    	tv.setSelected(oldValue);
-		    	masterList.sp.setTV(oldValue);
-		    }
-		});
-		
-		HBox typesBox = new HBox(tv, mov);
+
+//		controls.tv.selectedProperty().addListener(new ChangeListener<Boolean>() {
+//			@Override
+//			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+//				if (newValue == true)
+//					controls.mov.setSelected(oldValue);
+//				masterList.sp.setMov(oldValue);
+//			}
+//		});
+//
+//		controls.mov.selectedProperty().addListener(new ChangeListener<Boolean>() {
+//			@Override
+//			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+//				if (newValue == true)
+//					controls.tv.setSelected(oldValue);
+//				masterList.sp.setTV(oldValue);
+//			}
+//		});
+
+		HBox typesBox = new HBox(controls.tv, controls.mov);
 		typesBox.setSpacing(10);
 
-		submitBtn.setOnAction(eh);
-		submitBtn.setStyle("-fx-Alignment: center;");
-//		submitBtn.setDisable(true);
-		menuBtn.menubutton.setDisable(true);
+//		controls.submitBtn.setOnAction(submitEH);
+//		controls.submitBtn.setStyle("-fx-Alignment: center;");
+//
+//		controls.resetBtn.setOnAction(new EventHandler<ActionEvent>() {
+//			public void handle(final ActionEvent e) {
+//				resetGUI();
+//			}
+//		});
 
-//		resetBtn.setDisable(true);
-		resetBtn.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(final ActionEvent e) {
-				menuBtn.resetBoxes();
-				yearInput.clear();
-				ratingInput.clear();
-				g.setSelected(false);
-				l.setSelected(false);
-				tv.setSelected(false);
-				mov.setSelected(false);
-				combo.getSelectionModel().clearSelection();
-				masterList.sp.resetParameters();
-				table.table.getItems().clear();
-				table.addDataToTable(masterList);
-			}
-		});
-
-		yearInput.setPromptText("Year");
-		yearInput.setMinWidth(50);
-		yearInput.setMaxWidth(50);
-//		yearInput.setDisable(true);
+		controls.yearInput.setPromptText("Year");
+		controls.yearInput.setMinWidth(50);
+		controls.yearInput.setMaxWidth(50);
+		// yearInput.setDisable(true);
 		final Tooltip gTip = new Tooltip("Greater than or equal to.");
 		final Tooltip lTip = new Tooltip("Less than or equal to.");
 
-		g = new CheckBox("<=");
-		g.setTooltip(gTip);
-//		g.setDisable(true);
-		l = new CheckBox(">=");
-		l.setTooltip(lTip);
-//		l.setDisable(true);
-		
-		g.selectedProperty().addListener(new ChangeListener<Boolean>() {
-		    @Override
-		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-		    	if(newValue==true)
-		    	l.setSelected(oldValue);
-		    }
-		});
-		
-		l.selectedProperty().addListener(new ChangeListener<Boolean>() {
-		    @Override
-		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-		    	if(newValue==true)
-		    	g.setSelected(oldValue);
-		    }
+		controls.g = new CheckBox("<=");
+		controls.g.setTooltip(gTip);
+		// g.setDisable(true);
+		controls.l = new CheckBox(">=");
+		controls.l.setTooltip(lTip);
+		// l.setDisable(true);
+
+		controls.g.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue == true)
+					controls.l.setSelected(oldValue);
+			}
 		});
 
-		HBox yearBox = new HBox(yearInput, g, l);
+		controls.l.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue == true)
+					controls.g.setSelected(oldValue);
+			}
+		});
+
+		HBox yearBox = new HBox(controls.yearInput, controls.g, controls.l);
 		yearBox.setSpacing(10);
 
-		ratingInput.setPromptText("Rating");
-		ratingInput.setMinWidth(50);
-		ratingInput.setMaxWidth(50);
-//		ratingInput.setDisable(true);
+		controls.ratingInput.setPromptText("Rating");
+		controls.ratingInput.setMinWidth(50);
+		controls.ratingInput.setMaxWidth(50);
+		// ratingInput.setDisable(true);
 
-		HBox submitResetBox = new HBox(submitBtn, resetBtn);
+		HBox submitResetBox = new HBox(controls.submitBtn, controls.resetBtn);
 		submitResetBox.setSpacing(10);
 
-		VBox vb = new VBox(fileBtn, typesBox, menuBtn.menubutton, ratingInput, yearBox, combo, submitResetBox);
+		VBox vb = new VBox(controls.fileBtn, typesBox, controls.menuBtn.menubutton, controls.ratingInput, yearBox, controls.combo, submitResetBox);
 		vb.setSpacing(10);
 		vb.setPadding(new Insets(10, 50, 50, 10));
 		vb.setMaxWidth(300);
@@ -244,7 +150,7 @@ public class Main extends Application {
 		stage.setScene(scene);
 		// stage.setMaximized(true);
 		stage.show();
-		
+
 	}
 
 	public void printArray(String[] arr) {
@@ -258,4 +164,20 @@ public class Main extends Application {
 		for (String fileNames : file.list())
 			System.out.println(fileNames);
 	}
+
+//	public void resetGUI() {
+//		controls.menuBtn.resetBoxes();
+//		controls.yearInput.clear();
+//		controls.ratingInput.clear();
+//		// g.setSelected(false);
+//		// l.setSelected(false);
+//		// tv.setSelected(false);
+//		// mov.setSelected(false);
+//		controls.combo.getSelectionModel().clearSelection();
+//		masterList.sp.resetParameters();
+//		table.table.getItems().clear();
+//		table.addDataToTable(masterList);
+//	}
+
+	
 }

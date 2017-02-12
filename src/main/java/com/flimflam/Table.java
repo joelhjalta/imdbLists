@@ -50,7 +50,6 @@ public class Table {
 //			search = master;
 //			System.out.println("Loading " + search.data.size() + " elements to table.");
 //			table.getItems().addAll(search.data);
-			
 			this.loadMasterList();
 		}
 

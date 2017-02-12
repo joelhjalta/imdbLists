@@ -37,8 +37,12 @@ public class List {
 			Collections.reverseOrder());
 	public SearchParameters sp;
 
-	List() {
-
+	List(){
+		
+	}
+	
+	List(boolean master) {
+		sp = new SearchParameters();
 	}
 
 	List(File file) {
