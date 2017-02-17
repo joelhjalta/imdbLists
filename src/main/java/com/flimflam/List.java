@@ -1,5 +1,6 @@
 package com.flimflam;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +30,7 @@ import javafx.scene.image.Image;
 import javafx.scene.web.WebView;
 import javafx.util.Pair;
 
-public class List {
+public class List implements Serializable {
 	public ObservableList<Pair<WebView, Object>> data = FXCollections.observableArrayList();
 	public ArrayList<Item> arrList = new ArrayList<>();
 	public HashSet<String> genres = new HashSet<String>();
@@ -37,12 +39,14 @@ public class List {
 			Collections.reverseOrder());
 	public SearchParameters sp;
 
-	List(){
-		
+	List() {
+
 	}
-	
+
 	List(boolean master) {
 		sp = new SearchParameters();
+		readPreMaster();
+		System.out.println("Master list created");
 	}
 
 	List(File file) {
@@ -94,6 +98,7 @@ public class List {
 				String[] values = line.split(",");
 				if (values[0].toLowerCase().trim().equals("\"position\""))
 					continue;
+//				if( )
 				FetchItem fi = new FetchItem(values[1].substring(1, values[1].length() - 1));
 				Item item = new Item(fi.itemString);
 
@@ -105,22 +110,31 @@ public class List {
 				genresStr = item.json.get("Genre").toString();
 				genresArr = genresStr.split(", ");
 				for (String s : genresArr)
-					this.genres.add(s);
+					if (!(this.genres.contains(s)))
+						this.genres.add(s);
 
 				actorsStr = item.json.get("Actors").toString();
 				actorsArr = actorsStr.split(", ");
 				for (String s : actorsArr) {
 					// System.out.println("-" + s+ "-");
-					this.actors.add(s);
+					if (!(this.actors.contains(s)))
+						this.actors.add(s);
 				}
 
 				add(item);
 			}
 
-			File fill = new File("preMaster.txt");
-			Writer output = new BufferedWriter(new FileWriter(fill));
-			output.write(ja.toJSONString());
-			output.close();
+			// File fill = new File("preMaster.txt");
+			// Writer output = new BufferedWriter(new FileWriter(fill));
+			// output.write(ja.toJSONString());
+			// output.close();
+
+			System.out.println("list size:" + this.data.size());
+			FileOutputStream masterListFile = new FileOutputStream("masterList.ser");
+			BufferedOutputStream bout = new BufferedOutputStream(masterListFile);
+			ObjectOutputStream out = new ObjectOutputStream(bout);
+			out.writeObject(this.data);
+			out.flush();
 
 			// fil.write(ja.toJSONString());
 
@@ -128,24 +142,24 @@ public class List {
 			e.printStackTrace();
 		}
 	}
-	
-	public void readPreMaster(){
+
+	public void readPreMaster() {
 		JSONParser parser = new JSONParser();
 		File file = new File("preMaster.txt");
 		String genresStr = "";
 		String actorsStr = "";
 		String[] actorsArr;
 		String[] genresArr;
-		
+
 		try {
-//			System.out.println("Reading JSON file from Java program");
+			// System.out.println("Reading JSON file from Java program");
 			FileReader fileReader = new FileReader(file);
 			JSONArray jsonArray = (JSONArray) parser.parse(fileReader);
 			Iterator iterator = jsonArray.iterator();
-			while(iterator.hasNext()){
-				JSONObject json = (JSONObject)iterator.next();
-				System.out.println("reading...");
-				
+			while (iterator.hasNext()) {
+				JSONObject json = (JSONObject) iterator.next();
+				System.out.println("adding " + json.get("Title") + " ...");
+
 				Item item = new Item(json);
 				genresStr = item.json.get("Genre").toString();
 				genresArr = genresStr.split(", ");
@@ -161,7 +175,7 @@ public class List {
 
 				add(item);
 			}
-			
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

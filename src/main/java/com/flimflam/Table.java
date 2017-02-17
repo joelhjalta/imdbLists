@@ -14,9 +14,10 @@ public class Table {
 	public static final String INFO_COLUMN_NAME = "Info";
 	public static final String POSTER_COLUMN_NAME = "Poster";
 	public final TableView<Pair<WebView, Object>> table = new TableView<>();
-	private List master;
+	private List masterList;
 
-	Table() {
+	Table(List master) {
+		this.masterList = master;
 		TableColumn<Pair<WebView, Object>, WebView> infoColumn = new TableColumn<>(INFO_COLUMN_NAME);
 		infoColumn.setPrefWidth(600);
 		infoColumn.setEditable(false);
@@ -42,6 +43,7 @@ public class Table {
 		table.setMaxWidth(1215);
 		table.setMinWidth(1215);
 		posterColumn.setStyle("-fx-Alignment: center;");
+		loadMasterList();
 	}
 
 	public void addDataToTable(List search) {
@@ -64,11 +66,11 @@ public class Table {
 	}
 
 	public void loadMasterList() {
-		System.out.println("Loading " + master.data.size() + " elements to table.");
-		table.getItems().addAll(master.data);
+		System.out.println("Loading " + masterList.data.size() + " elements to table.");
+		table.getItems().addAll(masterList.data);
 	}
 
 	public void setMasterList(List list) {
-		this.master = list;
+		this.masterList = list;
 	}
 }

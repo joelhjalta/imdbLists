@@ -140,12 +140,14 @@ class SearchParameters {
 	}
 
 	public void setYear(String yearInput, boolean gInput, boolean lInput) {
+//		System.out.println("setYear");
 		this.year = Integer.parseInt(yearInput);
 		this.g = gInput;
 		this.l = lInput;
 	}
 
 	public void setRating(double rating) {
+//		System.out.println("setRating");
 		this.imdbRating = rating;
 	}
 
@@ -166,18 +168,22 @@ class SearchParameters {
 	}
 
 	public void setG(boolean setting) {
+//		System.out.println("setG");
 		this.g = setting;
 	}
 
 	public void setL(boolean setting) {
+//		System.out.println("setL");
 		this.l = setting;
 	}
 
 	public void setTV(boolean setting) {
+//		System.out.println("setTV");
 		this.tv = setting;
 	}
 
 	public void setMov(boolean setting) {
+//		System.out.println("setMov");
 		this.mov = setting;
 	}
 
@@ -194,6 +200,7 @@ class SearchParameters {
 	}
 
 	public void setActor(String name) {
+//		System.out.println("setActor");
 		this.actor = name;
 	}
 
