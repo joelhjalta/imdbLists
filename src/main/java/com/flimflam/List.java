@@ -33,7 +33,7 @@ import javafx.util.Pair;
 public class List implements Serializable {
 	public ObservableList<Pair<WebView, Object>> data = FXCollections.observableArrayList();
 	public ArrayList<Item> arrList = new ArrayList<>();
-	public HashSet<String> genres = new HashSet<String>();
+	public TreeSet<String> genres = new TreeSet<String>();
 	public TreeSet<String> actors = new TreeSet<String>();
 	public TreeMap<Integer, ObservableList<Pair<WebView, Object>>> searchLists = new TreeMap<Integer, ObservableList<Pair<WebView, Object>>>(
 			Collections.reverseOrder());
@@ -91,7 +91,7 @@ public class List implements Serializable {
 
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
-			FileWriter fil = new FileWriter("file1.txt");
+			FileWriter fil = new FileWriter("titles.txt");
 			JSONArray ja = new JSONArray();
 
 			while ((line = br.readLine()) != null) {
@@ -129,12 +129,12 @@ public class List implements Serializable {
 			// output.write(ja.toJSONString());
 			// output.close();
 
-			System.out.println("list size:" + this.data.size());
-			FileOutputStream masterListFile = new FileOutputStream("masterList.ser");
-			BufferedOutputStream bout = new BufferedOutputStream(masterListFile);
-			ObjectOutputStream out = new ObjectOutputStream(bout);
-			out.writeObject(this.data);
-			out.flush();
+//			System.out.println("list size:" + this.data.size());
+//			FileOutputStream masterListFile = new FileOutputStream("masterList.ser");
+//			BufferedOutputStream bout = new BufferedOutputStream(masterListFile);
+//			ObjectOutputStream out = new ObjectOutputStream(bout);
+//			out.writeObject(this.data);
+//			out.flush();
 
 			// fil.write(ja.toJSONString());
 

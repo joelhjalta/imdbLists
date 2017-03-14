@@ -16,8 +16,7 @@ public class Table {
 	public final TableView<Pair<WebView, Object>> table = new TableView<>();
 	private List masterList;
 
-	Table(List master) {
-		this.masterList = master;
+	Table() {
 		TableColumn<Pair<WebView, Object>, WebView> infoColumn = new TableColumn<>(INFO_COLUMN_NAME);
 		infoColumn.setPrefWidth(600);
 		infoColumn.setEditable(false);
@@ -44,6 +43,10 @@ public class Table {
 		table.setMinWidth(1215);
 		posterColumn.setStyle("-fx-Alignment: center;");
 		loadMasterList();
+	}
+	
+	public void setMaster(List master){
+		this.masterList = master;
 	}
 
 	public void addDataToTable(List search) {

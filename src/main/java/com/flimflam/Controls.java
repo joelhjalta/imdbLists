@@ -26,7 +26,7 @@ public class Controls {
 	public Button resetBtn = new Button("Reset");
 	public TextField ratingInput = new TextField();
 	public TextField yearInput = new TextField();
-	public ComboBox<String> combo = new ComboBox<>();
+	public ComboBox<String> actorsMenu = new ComboBox<>();
 	public ObservableList<String> actorsList = FXCollections.observableArrayList();
 	public CheckBox g = null;
 	public CheckBox l = null;
@@ -35,9 +35,7 @@ public class Controls {
 	public MenuButton genresMenu = new MenuButton("Genre");
 	public ArrayList<CheckBox> boxes = new ArrayList<CheckBox>();
 
-	Controls(List master, Table table) {
-		this.masterList = master;
-		this.table = table;
+	Controls() {
 
 		setupSubmit();
 		setupReset();
@@ -45,6 +43,11 @@ public class Controls {
 		setupType();
 		setupYear();
 		populateGenresList();
+	}
+	
+	public void setMaster(List master, Table table){
+		this.masterList = master;
+		this.table = table;
 	}
 	
 	private void setupSubmit(){
@@ -127,7 +130,7 @@ public class Controls {
 		l.setSelected(false);
 		tv.setSelected(false);
 		mov.setSelected(false);
-		combo.getSelectionModel().clearSelection();
+		actorsMenu.getSelectionModel().clearSelection();
 		masterList.sp.resetParameters();
 		table.table.getItems().clear();
 		table.loadMasterList();
@@ -147,6 +150,11 @@ public class Controls {
 		for (CustomMenuItem cmi : menuItems) {
 			genresMenu.getItems().add(cmi);
 		}
+	}
+	
+	public void populateActorsList(){
+		this.actorsList.setAll(masterList.actors);
+		this.actorsMenu.setItems(actorsList);
 	}
 
 	private void resetGenreBoxes() {
@@ -172,8 +180,8 @@ public class Controls {
 				g.setSelected(false);
 				l.setSelected(false);
 			}
-			if (FxUtilTest.getComboBoxValue(combo) != null)
-				masterList.sp.setActor(FxUtilTest.getComboBoxValue(combo));
+			if (FxUtilTest.getComboBoxValue(actorsMenu) != null)
+				masterList.sp.setActor(FxUtilTest.getComboBoxValue(actorsMenu));
 
 			List search = masterList.search();
 			table.table.getItems().clear();
@@ -197,4 +205,16 @@ public class Controls {
 			}
 		}
 	};
+	
+	public void toggleControls(boolean onoff){
+		tv.setDisable(onoff);
+		mov.setDisable(onoff);
+		genresMenu.setDisable(onoff);
+		ratingInput.setDisable(onoff);
+		yearInput.setDisable(onoff);
+		g.setDisable(onoff);
+		l.setDisable(onoff);
+		actorsMenu.setDisable(onoff);
+		resetBtn.setDisable(onoff);
+	}
 }

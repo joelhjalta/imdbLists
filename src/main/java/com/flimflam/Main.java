@@ -1,6 +1,7 @@
 package com.flimflam;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.TreeSet;
 
 import javafx.application.*;
@@ -21,11 +22,16 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	public List masterList = new List(true);
-	public Table table = new Table(masterList);
-	public Controls controls = new Controls(masterList, table);
+	public List masterList;
+	public Table table;
+	public Controls controls;
 	public Button fileBtn = new Button("Select file");
 	private final FileChooser fileChooser = new FileChooser();
+	private HBox typesBox = new HBox();
+	private HBox yearBox = new HBox();
+	private HBox submitResetBox = new HBox();
+	private VBox vb = new VBox();
+	private HBox hb = new HBox();
 
 	public static void main(String[] args) throws Exception {
 		launch(args);
@@ -33,9 +39,18 @@ public class Main extends Application {
 
 	public void start(final Stage stage) throws Exception {
 
-		controls.actorsList.setAll(masterList.actors);
-		controls.combo.setItems(controls.actorsList);
-
+		File titlesFile = new File("titles.txt");
+		if (titlesFile.exists() && !titlesFile.isDirectory()) {
+			masterList = new List(true);
+			table = new Table();
+			table.setMaster(masterList);
+			controls = new Controls();
+			controls.setMaster(masterList, table);
+			
+		}
+		
+//		else
+//			controls.toggleControls(false);
 		// getHostServices().showDocument("http://www.google.com");
 
 		fileBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -49,36 +64,33 @@ public class Main extends Application {
 					controls.populateGenresList();
 					table.setMasterList(masterList);
 					table.addDataToTable(masterList);
+//					controls.actorsList.setAll(masterList.actors);
+//					controls.actorsMenu.setItems(controls.actorsList);
+					fileBtn.setDisable(true);
+					typesBox = new HBox(controls.tv, controls.mov);
+					yearBox = new HBox(controls.yearInput, controls.g, controls.l);
+					submitResetBox = new HBox(controls.submitBtn, controls.resetBtn);
+					vb = new VBox(fileBtn, typesBox, controls.genresMenu, controls.ratingInput, yearBox, controls.actorsMenu,
+							submitResetBox);
 				}
 
-				controls.actorsList.setAll(masterList.actors);
-				controls.combo.setItems(controls.actorsList);
-				fileBtn.setDisable(true);
 				// for(String s: masterList.actors.keySet())
 				// System.out.println(s);
 			}
 		});
 
-		HBox typesBox = new HBox(controls.tv, controls.mov);
 		typesBox.setSpacing(10);
-
-		HBox yearBox = new HBox(controls.yearInput, controls.g, controls.l);
 		yearBox.setSpacing(10);
-
-		HBox submitResetBox = new HBox(controls.submitBtn, controls.resetBtn);
 		submitResetBox.setSpacing(10);
 
-		VBox vb = new VBox(fileBtn, typesBox, controls.genresMenu, controls.ratingInput, yearBox,
-				controls.combo, submitResetBox);
 		vb.setSpacing(10);
 		vb.setPadding(new Insets(10, 50, 50, 10));
 		vb.setMaxWidth(300);
 		vb.setMinWidth(300);
 
-		
 		vb.setMaxHeight(900);
 		vb.setMinHeight(900);
-		HBox hb = new HBox(table.table, vb);
+		hb = new HBox(table.table, vb);
 
 		final StackPane layout = new StackPane();
 		layout.getChildren().setAll(hb);
