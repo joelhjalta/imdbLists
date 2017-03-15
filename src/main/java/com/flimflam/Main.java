@@ -23,8 +23,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	public List masterList;
-	public Table table;
-	public Controls controls;
+	public Table table = new Table(masterList);
+	public Controls controls = new Controls(masterList, table);
 	public Button fileBtn = new Button("Select file");
 	private final FileChooser fileChooser = new FileChooser();
 	private HBox typesBox = new HBox();
@@ -42,11 +42,11 @@ public class Main extends Application {
 		File titlesFile = new File("titles.txt");
 		if (titlesFile.exists() && !titlesFile.isDirectory()) {
 			masterList = new List(true);
-			table = new Table();
 			table.setMaster(masterList);
-			controls = new Controls();
 			controls.setMaster(masterList, table);
-			
+			controls.populateActorsList();
+			controls.populateGenresList();
+			table.loadMasterList();
 		}
 		
 //		else
@@ -67,11 +67,6 @@ public class Main extends Application {
 //					controls.actorsList.setAll(masterList.actors);
 //					controls.actorsMenu.setItems(controls.actorsList);
 					fileBtn.setDisable(true);
-					typesBox = new HBox(controls.tv, controls.mov);
-					yearBox = new HBox(controls.yearInput, controls.g, controls.l);
-					submitResetBox = new HBox(controls.submitBtn, controls.resetBtn);
-					vb = new VBox(fileBtn, typesBox, controls.genresMenu, controls.ratingInput, yearBox, controls.actorsMenu,
-							submitResetBox);
 				}
 
 				// for(String s: masterList.actors.keySet())
@@ -79,6 +74,11 @@ public class Main extends Application {
 			}
 		});
 
+		typesBox = new HBox(controls.tv, controls.mov);
+		yearBox = new HBox(controls.yearInput, controls.g, controls.l);
+		submitResetBox = new HBox(controls.submitBtn, controls.resetBtn);
+		vb = new VBox(fileBtn, typesBox, controls.genresMenu, controls.ratingInput, yearBox, controls.actorsMenu,
+				submitResetBox);
 		typesBox.setSpacing(10);
 		yearBox.setSpacing(10);
 		submitResetBox.setSpacing(10);
@@ -90,7 +90,8 @@ public class Main extends Application {
 
 		vb.setMaxHeight(900);
 		vb.setMinHeight(900);
-		hb = new HBox(table.table, vb);
+		hb.getChildren().add(table.table);
+		hb.getChildren().add(vb);
 
 		final StackPane layout = new StackPane();
 		layout.getChildren().setAll(hb);

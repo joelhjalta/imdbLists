@@ -21,7 +21,6 @@ public class Controls {
 
 	public List masterList;
 	public Table table;
-//	public MenuBtn menuBtn;
 	public Button submitBtn = new Button("Submit");
 	public Button resetBtn = new Button("Reset");
 	public TextField ratingInput = new TextField();
@@ -35,46 +34,50 @@ public class Controls {
 	public MenuButton genresMenu = new MenuButton("Genre");
 	public ArrayList<CheckBox> boxes = new ArrayList<CheckBox>();
 
-	Controls() {
+	Controls(List master, Table table) {
 
 		setupSubmit();
 		setupReset();
 		setupRating();
 		setupType();
 		setupYear();
-		populateGenresList();
+		if (master != null) {
+			setMaster(master, table);
+			populateGenresList();
+			populateActorsList();
+		}
 	}
-	
-	public void setMaster(List master, Table table){
+
+	public void setMaster(List master, Table table) {
 		this.masterList = master;
 		this.table = table;
 	}
-	
-	private void setupSubmit(){
+
+	private void setupSubmit() {
 		submitBtn.setOnAction(submitEH);
 		submitBtn.setStyle("-fx-Alignment: center;");
 	}
-	
-	private void setupReset(){
+
+	private void setupReset() {
 		resetBtn.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(final ActionEvent e) {
 				resetGUI();
 			}
 		});
-		
+
 	}
-	
-	private void setupRating(){
+
+	private void setupRating() {
 		ratingInput.setPromptText("Rating");
 		ratingInput.setMinWidth(50);
 		ratingInput.setMaxWidth(50);
-		
+
 	}
-	
-	private void setupType(){
+
+	private void setupType() {
 		tv = new CheckBox("TV");
 		mov = new CheckBox("Movies");
-		
+
 		tv.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -93,12 +96,12 @@ public class Controls {
 			}
 		});
 	}
-	
-	private void setupYear(){
+
+	private void setupYear() {
 		yearInput.setPromptText("Year");
 		yearInput.setMinWidth(50);
 		yearInput.setMaxWidth(50);
-		
+
 		final Tooltip gTip = new Tooltip("Greater than or equal to.");
 		final Tooltip lTip = new Tooltip("Less than or equal to.");
 		g = new CheckBox("<=");
@@ -121,7 +124,7 @@ public class Controls {
 			}
 		});
 	}
-	
+
 	public void resetGUI() {
 		resetGenreBoxes();
 		yearInput.clear();
@@ -135,7 +138,6 @@ public class Controls {
 		table.table.getItems().clear();
 		table.loadMasterList();
 	}
-	
 
 	public void populateGenresList() {
 		ArrayList<CustomMenuItem> menuItems = new ArrayList<CustomMenuItem>();
@@ -151,8 +153,8 @@ public class Controls {
 			genresMenu.getItems().add(cmi);
 		}
 	}
-	
-	public void populateActorsList(){
+
+	public void populateActorsList() {
 		this.actorsList.setAll(masterList.actors);
 		this.actorsMenu.setItems(actorsList);
 	}
@@ -166,7 +168,6 @@ public class Controls {
 	private EventHandler<ActionEvent> submitEH = new EventHandler<ActionEvent>() {
 		@Override
 		public void handle(ActionEvent event) {
-//			System.out.println("submit button");
 			if (ratingInput.getText().isEmpty())
 				masterList.sp.setRating(0.0);
 			else
@@ -190,13 +191,11 @@ public class Controls {
 		}
 	};
 
-	
-
 	private EventHandler<ActionEvent> genresMenuEH = new EventHandler<ActionEvent>() {
 		@Override
 		public void handle(ActionEvent event) {
 			if (event.getSource() instanceof CheckBox) {
-//				System.out.println("genre menu");
+				// System.out.println("genre menu");
 				CheckBox chbx = (CheckBox) event.getSource();
 				if (chbx.isSelected())
 					masterList.sp.addGenre(chbx.getText());
@@ -205,8 +204,8 @@ public class Controls {
 			}
 		}
 	};
-	
-	public void toggleControls(boolean onoff){
+
+	public void toggleControls(boolean onoff) {
 		tv.setDisable(onoff);
 		mov.setDisable(onoff);
 		genresMenu.setDisable(onoff);

@@ -16,7 +16,7 @@ public class Table {
 	public final TableView<Pair<WebView, Object>> table = new TableView<>();
 	private List masterList;
 
-	Table() {
+	Table(List master) {
 		TableColumn<Pair<WebView, Object>, WebView> infoColumn = new TableColumn<>(INFO_COLUMN_NAME);
 		infoColumn.setPrefWidth(600);
 		infoColumn.setEditable(false);
@@ -42,7 +42,10 @@ public class Table {
 		table.setMaxWidth(1215);
 		table.setMinWidth(1215);
 		posterColumn.setStyle("-fx-Alignment: center;");
-		loadMasterList();
+		if(master != null ){
+			setMaster(master);
+			loadMasterList();
+		}
 	}
 	
 	public void setMaster(List master){
