@@ -49,6 +49,9 @@ public class Main extends Application {
 			table.loadMasterList();
 		}
 		
+		else
+			controls.toggleControls(false);
+		
 //		else
 //			controls.toggleControls(false);
 		// getHostServices().showDocument("http://www.google.com");

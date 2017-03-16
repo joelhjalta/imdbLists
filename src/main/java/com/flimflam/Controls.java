@@ -41,16 +41,17 @@ public class Controls {
 		setupRating();
 		setupType();
 		setupYear();
+		this.actorsMenu.setPromptText("Actor");
 		if (master != null) {
 			setMaster(master, table);
-			populateGenresList();
-			populateActorsList();
 		}
 	}
 
 	public void setMaster(List master, Table table) {
 		this.masterList = master;
 		this.table = table;
+		populateGenresList();
+		populateActorsList();
 	}
 
 	private void setupSubmit() {
@@ -141,16 +142,20 @@ public class Controls {
 
 	public void populateGenresList() {
 		ArrayList<CustomMenuItem> menuItems = new ArrayList<CustomMenuItem>();
-		for (String s : masterList.genres) {
-			CheckBox checkbox = new CheckBox(s);
-			checkbox.setOnAction(genresMenuEH);
-			this.boxes.add(checkbox);
-			CustomMenuItem cmi = new CustomMenuItem(checkbox);
-			cmi.setHideOnClick(false);
-			menuItems.add(cmi);
-		}
-		for (CustomMenuItem cmi : menuItems) {
-			genresMenu.getItems().add(cmi);
+		if (masterList.genres == null || masterList.genres.isEmpty()) {
+			System.out.println("genres empty, break");
+		} else {
+			for (String s : masterList.genres) {
+				CheckBox checkbox = new CheckBox(s);
+				checkbox.setOnAction(genresMenuEH);
+				this.boxes.add(checkbox);
+				CustomMenuItem cmi = new CustomMenuItem(checkbox);
+				cmi.setHideOnClick(false);
+				menuItems.add(cmi);
+			}
+			for (CustomMenuItem cmi : menuItems) {
+				genresMenu.getItems().add(cmi);
+			}
 		}
 	}
 
