@@ -44,8 +44,8 @@ public class Main extends Application {
 			masterList = new List(true);
 			table.setMaster(masterList);
 			controls.setMaster(masterList, table);
-			controls.populateActorsList();
-			controls.populateGenresList();
+//			controls.populateActorsList();
+//			controls.populateGenresList();
 			table.loadMasterList();
 		}
 		
@@ -64,9 +64,10 @@ public class Main extends Application {
 					// System.out.println("absolute file path: " +
 					// file.getAbsolutePath());
 					masterList = new List(file);
-					controls.populateGenresList();
 					table.setMasterList(masterList);
 					table.addDataToTable(masterList);
+					controls.setMaster(masterList, table);
+//					controls.populateGenresList();
 //					controls.actorsList.setAll(masterList.actors);
 //					controls.actorsMenu.setItems(controls.actorsList);
 					fileBtn.setDisable(true);
