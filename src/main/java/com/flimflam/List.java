@@ -58,7 +58,7 @@ public class List implements Serializable {
 	public void add(Item item) {
 		this.data.add(item.pair);
 		this.arrList.add(item);
-		this.IDset.add(e)
+		this.IDset.add(item.json.get("imdbID").toString());
 	}
 
 	public List search() {
@@ -98,6 +98,10 @@ public class List implements Serializable {
 				String[] values = line.split(",");
 				if (values[0].toLowerCase().trim().equals("\"position\""))
 					continue;
+				if(IDset.contains(values[1].substring(1, values[1].length() - 1))){
+					System.out.println("Already there.");
+					continue;
+				}
 				FetchItem fi = new FetchItem(values[1].substring(1, values[1].length() - 1));
 				Item item = new Item(fi.itemString);
 
