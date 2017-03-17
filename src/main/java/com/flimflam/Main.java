@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	public List masterList;
+	public List masterList = new List();
 	public Table table = new Table(masterList);
 	public Controls controls = new Controls(masterList, table);
 	public Button fileBtn = new Button("Select file");
@@ -39,18 +39,19 @@ public class Main extends Application {
 
 	public void start(final Stage stage) throws Exception {
 
-		File titlesFile = new File("titles.txt");
-		if (titlesFile.exists() && !titlesFile.isDirectory()) {
-			masterList = new List(true);
-			table.setMaster(masterList);
-			controls.setMaster(masterList, table);
-//			controls.populateActorsList();
-//			controls.populateGenresList();
+		File pmFile = new File("preMaster.txt");
+		if (pmFile.exists() && !pmFile.isDirectory()) {
+//			masterList = new List(true);
+			masterList.readPreMaster();
+			
+//			table.setMaster(masterList);
+			controls.populateActorsList();
+			controls.populateGenresList();
 			table.loadMasterList();
 		}
 		
 		else
-			controls.toggleControls(false);
+			controls.disableControls(true);
 		
 //		else
 //			controls.toggleControls(false);
@@ -61,20 +62,20 @@ public class Main extends Application {
 			public void handle(final ActionEvent e) {
 				File file = fileChooser.showOpenDialog(stage);
 				if (file != null) {
-					// System.out.println("absolute file path: " +
-					// file.getAbsolutePath());
-					masterList = new List(file);
-					table.setMasterList(masterList);
+					// System.out.println("absolute file path: " + file.getAbsolutePath());
+//					masterList = new List(file);
+					masterList.readCSV(file);
+					
+//					table.setMasterList(masterList);
 					table.addDataToTable(masterList);
-					controls.setMaster(masterList, table);
-//					controls.populateGenresList();
-//					controls.actorsList.setAll(masterList.actors);
-//					controls.actorsMenu.setItems(controls.actorsList);
-					fileBtn.setDisable(true);
+//					controls.setMaster(masterList, table);
+//					fileBtn.setDisable(true);
 				}
 
 				// for(String s: masterList.actors.keySet())
 				// System.out.println(s);
+				
+				controls.disableControls(false);
 			}
 		});
 

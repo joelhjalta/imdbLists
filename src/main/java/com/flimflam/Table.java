@@ -17,6 +17,7 @@ public class Table {
 	private List masterList;
 
 	Table(List master) {
+		this.masterList = master;
 		TableColumn<Pair<WebView, Object>, WebView> infoColumn = new TableColumn<>(INFO_COLUMN_NAME);
 		infoColumn.setPrefWidth(600);
 		infoColumn.setEditable(false);
@@ -42,15 +43,11 @@ public class Table {
 		table.setMaxWidth(1215);
 		table.setMinWidth(1215);
 		posterColumn.setStyle("-fx-Alignment: center;");
-		if(master != null ){
-			setMaster(master);
+		if(!(master.data.isEmpty()) ){
 			loadMasterList();
 		}
 	}
 	
-	public void setMaster(List master){
-		this.masterList = master;
-	}
 
 	public void addDataToTable(List search) {
 		if (search.searchLists.isEmpty()) {
@@ -64,7 +61,7 @@ public class Table {
 		else
 			for (Map.Entry<Integer, ObservableList<Pair<WebView, Object>>> entry : search.searchLists.entrySet()) {
 				table.getItems().addAll(entry.getValue());
-				System.out.println("Loading " + entry.getValue().size() + " elements to table.");
+				System.out.println("addDataToTable(): Loading " + entry.getValue().size() + " elements to table.");
 			}
 
 		// table.setPrefHeight(275);
@@ -72,11 +69,11 @@ public class Table {
 	}
 
 	public void loadMasterList() {
-		System.out.println("Loading " + masterList.data.size() + " elements to table.");
+		System.out.println("loadMasterList(): Loading " + masterList.data.size() + " elements to table.");
 		table.getItems().addAll(masterList.data);
 	}
 
-	public void setMasterList(List list) {
-		this.masterList = list;
-	}
+//	public void setMasterList(List list) {
+//		this.masterList = list;
+//	}
 }

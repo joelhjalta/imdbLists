@@ -42,16 +42,13 @@ public class Controls {
 		setupType();
 		setupYear();
 		this.actorsMenu.setPromptText("Actor");
-		if (master != null) {
-			setMaster(master, table);
-		}
-	}
-
-	public void setMaster(List master, Table table) {
 		this.masterList = master;
 		this.table = table;
-		populateGenresList();
-		populateActorsList();
+		if (!(master.data.isEmpty())) {
+			populateGenresList();
+			populateActorsList();
+		}
+
 	}
 
 	private void setupSubmit() {
@@ -210,15 +207,17 @@ public class Controls {
 		}
 	};
 
-	public void toggleControls(boolean onoff) {
-		tv.setDisable(onoff);
-		mov.setDisable(onoff);
-		genresMenu.setDisable(onoff);
-		ratingInput.setDisable(onoff);
-		yearInput.setDisable(onoff);
-		g.setDisable(onoff);
-		l.setDisable(onoff);
-		actorsMenu.setDisable(onoff);
-		resetBtn.setDisable(onoff);
+	public void disableControls(boolean off) {
+		// System.out.println("disable: " + off);
+		this.tv.setDisable(off);
+		this.mov.setDisable(off);
+		this.genresMenu.setDisable(off);
+		this.ratingInput.setDisable(off);
+		this.yearInput.setDisable(off);
+		this.g.setDisable(off);
+		this.l.setDisable(off);
+		this.actorsMenu.setDisable(off);
+		this.resetBtn.setDisable(off);
+		this.submitBtn.setDisable(off);
 	}
 }
