@@ -37,7 +37,7 @@ public class Main extends Application {
 	public static void main(String[] args) throws Exception {
 		launch(args);
 	}
-
+//testing
 	public void start(final Stage stage) throws Exception {
 
 		File pmFile = new File("preMaster.txt");
