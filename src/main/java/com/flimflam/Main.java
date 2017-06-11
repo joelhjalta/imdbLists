@@ -32,6 +32,7 @@ public class Main extends Application {
 	private HBox submitResetBox = new HBox();
 	private VBox vb = new VBox();
 	private HBox hb = new HBox();
+	public final ProgressIndicator progInd = new ProgressIndicator(-1f);
 
 	public static void main(String[] args) throws Exception {
 		launch(args);
@@ -78,12 +79,14 @@ public class Main extends Application {
 				controls.disableControls(false);
 			}
 		});
+		
+		progInd.setVisible(false);
 
 		typesBox = new HBox(controls.tv, controls.mov);
 		yearBox = new HBox(controls.yearInput, controls.g, controls.l);
 		submitResetBox = new HBox(controls.submitBtn, controls.resetBtn);
 		vb = new VBox(fileBtn, typesBox, controls.genresMenu, controls.ratingInput, yearBox, controls.actorsMenu,
-				submitResetBox);
+				submitResetBox, progInd);
 		typesBox.setSpacing(10);
 		yearBox.setSpacing(10);
 		submitResetBox.setSpacing(10);

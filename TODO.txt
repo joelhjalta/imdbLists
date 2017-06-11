@@ -1,0 +1,3 @@
+-Setja upp threading þannig að UI frjósi aldrei
+-Setja upp einhvers konar database, file-based eða sql, til að forritið viðhaldi bara eigin lista
+-Setja þetta upp í fullscreen með % þannig að þetta virki á öllum skjám

@@ -18,6 +18,6 @@ public class FetchItem {
 	
 	private String URLer(String ID){
 //		System.out.println("http://www.omdbapi.com/?i=" + ID + "&plot=full&r=json");
-		return "http://www.omdbapi.com/?i=" + ID + "&plot=full&r=json";
+		return "http://www.omdbapi.com/?i=" + ID + "&plot=full&r=json&apikey=2819c61f";
 	}
 }

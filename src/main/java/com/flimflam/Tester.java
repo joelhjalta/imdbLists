@@ -1,69 +1,107 @@
 package com.flimflam;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
-import org.controlsfx.control.textfield.AutoCompletionBinding;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import impl.org.controlsfx.autocompletion.AutoCompletionTextFieldBinding;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.concurrent.Task;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
+import javafx.stage.StageStyle;
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
+import java.io.*;
 
 public class Tester extends Application {
-	private ComboBox<String> combo = new ComboBox<>();
 
-	@Override
-	public void start(Stage primaryStage) throws FileNotFoundException, IOException, ParseException {
+    @Override
+    public void start(Stage primaryStage) {
+        Button startButton = new Button("Start");
+        startButton.setOnAction(e -> {
+            ProgressForm pForm = new ProgressForm();
 
-		JSONParser parser = new JSONParser();
-		File file = new File("preMaster.txt");
-		try {
-			System.out.println("Reading JSON file from Java program");
-			FileReader fileReader = new FileReader(file);
-			JSONArray jsonArray = (JSONArray) parser.parse(fileReader);
-			Iterator iterator = jsonArray.iterator();
-			while(iterator.hasNext()){
-				JSONObject json = (JSONObject)iterator.next();
-				System.out.println(json.toJSONString());
-			}
-			
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+            // In real life this task would do something useful and return 
+            // some meaningful result:
+            Task<Void> task = new Task<Void>() {
+                @Override
+                public Void call() throws InterruptedException {
+                    for (int i = 0; i < 10; i++) {
+                        updateProgress(i, 10);
+                        Thread.sleep(200);
+                    }
+                    updateProgress(10, 10);
+                    return null ;
+                }
+            };
 
-		StackPane root = new StackPane();
-		// root.getChildren().add(hb);
+            // binds progress of progress bars to progress of task:
+            pForm.activateProgressBar(task);
 
-		Scene scene = new Scene(root, 300, 250);
+            // in real life this method would get the result of the task
+            // and update the UI based on its value:
+            task.setOnSucceeded(event -> {
+                pForm.getDialogStage().close();
+                startButton.setDisable(false);
+            });
 
-		primaryStage.setTitle("Hello World!");
-		primaryStage.setScene(scene);
-		// primaryStage.show();
-	}
+            startButton.setDisable(true);
+            pForm.getDialogStage().show();
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+            Thread thread = new Thread(task);
+            thread.start();
+        });
+
+        StackPane root = new StackPane(startButton);
+        Scene scene = new Scene(root, 350, 75);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+    }
+
+    public static class ProgressForm {
+        private final Stage dialogStage;
+        private final ProgressBar pb = new ProgressBar();
+        private final ProgressIndicator pin = new ProgressIndicator();
+
+        public ProgressForm() {
+            dialogStage = new Stage();
+            dialogStage.initStyle(StageStyle.UTILITY);
+            dialogStage.setResizable(false);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+
+            // PROGRESS BAR
+            final Label label = new Label();
+            label.setText("alerto");
+
+            pb.setProgress(-1F);
+            pin.setProgress(-1F);
+
+            final HBox hb = new HBox();
+            hb.setSpacing(5);
+            hb.setAlignment(Pos.CENTER);
+            hb.getChildren().addAll(label, pb, pin);
+
+            Scene scene = new Scene(hb);
+            dialogStage.setScene(scene);
+        }
+
+        public void activateProgressBar(final Task<?> task)  {
+            pb.progressProperty().bind(task.progressProperty());
+            pin.progressProperty().bind(task.progressProperty());
+            dialogStage.show();
+        }
+
+        public Stage getDialogStage() {
+            return dialogStage;
+        }
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

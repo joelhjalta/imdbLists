@@ -148,7 +148,7 @@ public class List implements Serializable {
 			Iterator iterator = jsonArray.iterator();
 			while (iterator.hasNext()) {
 				JSONObject json = (JSONObject) iterator.next();
-				System.out.println("adding " + json.get("Title") + " ...");
+				System.out.println("adding: " + json.get("Title"));
 
 				Item item = new Item(json);
 				genresStr = item.json.get("Genre").toString();
