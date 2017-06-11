@@ -11,9 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -22,7 +20,7 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class MainBackup extends Application {
 
 	public List masterList = new List();
 	public Table table = new Table(masterList);
@@ -41,7 +39,7 @@ public class Main extends Application {
 
 	public void start(final Stage stage) throws Exception {
 
-		/*File pmFile = new File("preMaster.txt");
+		File pmFile = new File("preMaster.txt");
 		if (pmFile.exists() && !pmFile.isDirectory()) {
 //			masterList = new List(true);
 			masterList.readPreMaster();
@@ -108,39 +106,7 @@ public class Main extends Application {
 		scene.getStylesheets().add("com/flimflam/application.css");
 		stage.setScene(scene);
 		 stage.setMaximized(true);
-		stage.show();*/
-		
-		
-		
-		
-		
-		
-		
-		
-		
-        GridPane root = new GridPane();
-        int numCols = 3 ;
-        for (int i = 0 ; i < numCols ; i++) {
-        	ColumnConstraints cc = new ColumnConstraints();
-        	cc.setPercentWidth(100.0 / numCols);
-        	root.getColumnConstraints().add(cc);
-//            rc.setPercentHeight(100.0 / numCols);
-//            rc.setValignment(VPos.BOTTOM);
-//            root.getRowConstraints().add(rc);
-        }
-//        ColumnConstraints cc = new ColumnConstraints();
-//        cc.setHalignment(HPos.CENTER);
-//        cc.setPercentWidth(100);
-//        root.getColumnConstraints().add(cc);
-
-        for (int row = 0; row < 3 ; row++) {
-            Label label = new Label("Label "+(row+1));
-            root.add(label, row, 0);
-        }
-
-        Scene scene = new Scene(root, 400, 400);
-        stage.setScene(scene);
-        stage.show();
+		stage.show();
 
 	}
 
