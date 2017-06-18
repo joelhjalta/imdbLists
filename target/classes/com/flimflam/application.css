@@ -17,3 +17,7 @@ a { color: inherit;
 h2, h3{
 line-height:1px;
 }
+
+.bg-black-style {
+    -fx-background-color:  black;
+}

@@ -20,9 +20,18 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.security.sasl.SaslException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,10 +53,10 @@ public class List implements Serializable {
 
 	}
 
-	List(boolean master) {
+	List(boolean master) throws SAXException {
 		// sp = new SearchParameters();
 		readPreMaster();
-		System.out.println("Master list created");
+		System.out.println("PreMaster read.");
 	}
 
 	List(File file) {
@@ -116,7 +125,7 @@ public class List implements Serializable {
 				actorsStr = item.json.get("Actors").toString();
 				actorsArr = actorsStr.split(", ");
 				for (String s : actorsArr) {
-					// System.out.println("-" + s+ "-");
+//					System.out.println("-" + s+ "-");
 					this.actors.add(s);
 				}
 
@@ -132,6 +141,8 @@ public class List implements Serializable {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	public void readPreMaster() {
 		JSONParser parser = new JSONParser();
@@ -170,7 +181,7 @@ public class List implements Serializable {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public void printList() {
 		for (Item item : this.arrList) {
 			item.printItem();

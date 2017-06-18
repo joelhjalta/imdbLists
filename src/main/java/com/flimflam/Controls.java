@@ -138,6 +138,8 @@ public class Controls {
 	}
 
 	public void populateGenresList() {
+		if(!genresMenu.getItems().isEmpty())
+			genresMenu.getItems().clear();
 		ArrayList<CustomMenuItem> menuItems = new ArrayList<CustomMenuItem>();
 		if (masterList.genres == null || masterList.genres.isEmpty()) {
 			System.out.println("genres empty, break");

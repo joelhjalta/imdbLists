@@ -19,13 +19,15 @@ public class Table {
 	Table(List master) {
 		this.masterList = master;
 		TableColumn<Pair<WebView, Object>, WebView> infoColumn = new TableColumn<>(INFO_COLUMN_NAME);
-		infoColumn.setPrefWidth(600);
+//		infoColumn.setPrefWidth(600);
 		infoColumn.setEditable(false);
 		TableColumn<Pair<WebView, Object>, Object> posterColumn = new TableColumn<>(POSTER_COLUMN_NAME);
 		posterColumn.setSortable(false);
-		posterColumn.setPrefWidth(600);
+//		posterColumn.setPrefWidth(600);
 		posterColumn.setEditable(false);
 		posterColumn.getStyleClass().add("posterColumn");
+		infoColumn.prefWidthProperty().bind(table.widthProperty().multiply(0.5));
+		posterColumn.prefWidthProperty().bind(table.widthProperty().multiply(0.5));
 
 		infoColumn.setCellValueFactory(new PairKeyFactory());
 		posterColumn.setCellValueFactory(new PairValueFactory());
@@ -39,9 +41,9 @@ public class Table {
 						return new PairValueCell();
 					}
 				});
-		table.setFixedCellSize(600.0);
-		table.setMaxWidth(1215);
-		table.setMinWidth(1215);
+//		table.setFixedCellSize(600.0);
+//		table.setMaxWidth(1215);
+//		table.setMinWidth(1215);
 		posterColumn.setStyle("-fx-Alignment: center;");
 		if(!(master.data.isEmpty()) ){
 			loadMasterList();
