@@ -100,18 +100,22 @@ public class List implements Serializable {
 		String[] genresArr;
 
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-
+			
+			//skip the first line
+			br.readLine();
+			
 			JSONArray ja = new JSONArray();
 
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
-				if (values[0].toLowerCase().trim().equals("\"position\""))
-					continue;
+				
 				if(IDset.contains(values[1].substring(1, values[1].length() - 1))){
 					System.out.println("Already there.");
 					continue;
 				}
+				System.out.println("List:116 - " + values[1].substring(1, values[1].length() - 1));
 				FetchItem fi = new FetchItem(values[1].substring(1, values[1].length() - 1));
+				System.out.println("List:118 - " + fi.itemString);
 				Item item = new Item(fi.itemString);
 
 				// add json objects to jsonarray

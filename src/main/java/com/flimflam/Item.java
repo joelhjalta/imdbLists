@@ -23,12 +23,14 @@ class Item {
 
 	Item(String itemStr) {
 
+		System.out.println("Item:26 - itemStr: " + itemStr);
 		try {
 			this.json = (JSONObject) new JSONParser().parse(itemStr);
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("JSON parse exception.");
 		}
 		checkPoster();
 		this.pair = pair(new Webs(this.json), new Image(this.json.get("Poster").toString()));
@@ -50,9 +52,15 @@ class Item {
 	}
 
 	private void checkPoster() {
+		try{
 		if (this.json.get("Poster").toString().equals("N/A"))
 			this.json.put("Poster",
 					"http://www.kalahandi.info/wp-content/uploads/2016/05/sorry-image-not-available.png");
+	
+		}catch (NullPointerException npe) {
+			// TODO: handle exception
+			System.out.println("Checkposter() error.");
+		}
 	}
 
 	public Pair<WebView, Object> pair(Webs web, Object value) {
