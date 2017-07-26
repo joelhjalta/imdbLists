@@ -23,7 +23,7 @@ class Item {
 
 	Item(String itemStr) {
 
-		System.out.println("Item:26 - itemStr: " + itemStr);
+//		System.out.println("Item:26 - itemStr: " + itemStr);
 		try {
 			this.json = (JSONObject) new JSONParser().parse(itemStr);
 

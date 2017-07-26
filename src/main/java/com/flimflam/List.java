@@ -53,21 +53,22 @@ public class List implements Serializable {
 
 	}
 
-	List(boolean master) throws SAXException {
-		// sp = new SearchParameters();
-		readPreMaster();
-		System.out.println("PreMaster read.");
-	}
+//	List(boolean master) throws SAXException {
+//		// sp = new SearchParameters();
+//		readPreMaster();
+//		System.out.println("PreMaster read.");
+//	}
 
-	List(File file) {
-		readCSV(file);
-		// sp = new SearchParameters();
-	}
+//	List(File file) {
+//		readCSV(file);
+//		// sp = new SearchParameters();
+//	}
 
 	public void add(Item item) {
 		this.data.add(item.pair);
 		this.arrList.add(item);
 		this.IDset.add(item.json.get("imdbID").toString());
+//		System.out.println("-" + item.json.get("imdbID").toString() + "-");
 	}
 
 	public List search() {
@@ -109,13 +110,14 @@ public class List implements Serializable {
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(",");
 				
-				if(IDset.contains(values[1].substring(1, values[1].length() - 1))){
+//				System.out.println("checking for:-" + values[1].substring(2, values[1].length() - 2) + "-");
+				if(IDset.contains(values[1].substring(2, values[1].length() - 2))){
 					System.out.println("Already there.");
 					continue;
 				}
 				System.out.println("List:116 - " + values[1].substring(1, values[1].length() - 1));
 				FetchItem fi = new FetchItem(values[1].substring(1, values[1].length() - 1));
-				System.out.println("List:118 - " + fi.itemString);
+//				System.out.println("List:118 - " + fi.itemString);
 				Item item = new Item(fi.itemString);
 
 				// add json objects to jsonarray
@@ -144,6 +146,8 @@ public class List implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("IDset:" + IDset.size());
 	}
 	
 	
@@ -163,7 +167,7 @@ public class List implements Serializable {
 			Iterator iterator = jsonArray.iterator();
 			while (iterator.hasNext()) {
 				JSONObject json = (JSONObject) iterator.next();
-				System.out.println("adding: " + json.get("Title"));
+//				System.out.println("adding: " + json.get("Title"));
 
 				Item item = new Item(json);
 				genresStr = item.json.get("Genre").toString();
@@ -180,6 +184,7 @@ public class List implements Serializable {
 
 				add(item);
 			}
+			System.out.println("IDset:" + IDset.size());
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
